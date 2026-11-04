@@ -13,6 +13,7 @@
       "title": "Hook",
       "description": "A bold opening title with a bright accent bar",
       "animation": "pop",
+      "camera": "push-in",
       "elements": [
         {"type":"text","text":"YOUR BODY","x":540,"y":700,"size":92,"weight":900,"fill":"#ffffff"},
         {"type":"text","text":"NEEDS WATER","x":540,"y":820,"size":84,"weight":900,"fill":"#68d5ff"},
@@ -24,6 +25,7 @@
       "duration": 4,
       "title": "Simple visual fact",
       "animation": "slide",
+      "camera": "pan-left",
       "elements": [
         {"type":"text","text":"HYDRATION","x":540,"y":550,"size":76,"fill":"#68d5ff"},
         {"type":"text","text":"supports normal body functions","x":540,"y":680,"size":44,"weight":600,"fill":"#ffffff"},
