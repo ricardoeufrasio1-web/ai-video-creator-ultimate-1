@@ -18,7 +18,9 @@ try {
   assert.match(html,/<svg/);
   assert.match(html,/camera-push-in/);
   assert.match(html,/#68d5ff/);
-  assert.match(html,/transition-wipe-left/);\n  assert.match(html,/<polygon points=/);\n  assert.match(html,/star/);
+  assert.match(html,/transition-wipe-left/);
+  assert.match(html,/<polygon points=/);
+  assert.match(html,/star/);
   assert.doesNotMatch(html,/<script[^>]+src=/i);
   console.log("Procedural scene engine smoke test passed.");
 } finally { await rm(temp,{recursive:true,force:true}); }
