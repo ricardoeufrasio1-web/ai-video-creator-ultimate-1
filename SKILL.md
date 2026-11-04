@@ -75,6 +75,7 @@ Load only the relevant specialist modules for the task:
 - `modules/creative-direction.md` — storyboard, camera, lighting, and continuity.
 - `modules/asset-production.md` — image, video, voice, audio, and graphics assets.
 - `modules/timeline-orchestration.md` — FPS, frames, tracks, transitions, and continuity.
+- `modules/media-management.md` — asset provenance, folder structure, normalization, and rights checks.
 - `modules/automation.md` — project generation, validation, repeatability, and errors.
 - `modules/editing-hyperframes.md` — composition and rendering with HyperFrames.
 - `modules/audio.md` — narration, music, effects, and mixing.
@@ -89,6 +90,7 @@ Select modules according to the user's request, available tools, and production 
 - Use `docs/render-pipeline.md` for the complete preflight-to-delivery process.
 - Use `docs/project-schema.md` for the starter JSON structure.
 - Use `templates/asset-manifest.csv` to track source, rights, dimensions, duration, and continuity for every asset.
+- Use `tools/asset-preflight/check.mjs` with a project JSON manifest to verify local file paths and flag missing rights metadata; see `examples/assets/manifest.example.json`.
 - Use `examples/hyperframes-basic/` as an original minimal composition and generator input.
 - Use the current HyperFrames CLI diagnostics, lint, check, snapshot, preview, and render commands as documented upstream. Confirm exact flags with the installed CLI.
 
