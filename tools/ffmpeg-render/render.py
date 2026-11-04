@@ -57,7 +57,7 @@ def main():
             fail(f"Scene {index} duration must be between 0 and 3600 seconds")
         if kind not in ("image", "video"):
             fail(f"Scene {index} type must be image or video")
-                try:
+        try:
             fade_in = float(scene.get("fade_in", 0))
             fade_out = float(scene.get("fade_out", 0))
         except (TypeError, ValueError):
