@@ -79,7 +79,10 @@ def main():
             fail(f"Scene {index} has invalid fade values")
         if transition_duration and duration <= transition_duration:
             fail(f"Scene {index} duration must be longer than the crossfade duration")
-        normalized.append((kind, resolve_asset(root, str(scene.get("src", ""))), duration, fade_in, fade_out))
+        motion = scene.get("motion", "none")
+        if motion not in ("none", "zoom_in", "zoom_out"):
+            fail(f"Scene {index} motion must be none, zoom_in, or zoom_out")
+        normalized.append((kind, resolve_asset(root, str(scene.get("src", ""))), duration, fade_in, fade_out, motion))
         scene_duration_total += duration
     total = scene_duration_total - transition_duration * max(0, len(normalized) - 1)
     audio = []
@@ -130,7 +133,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix="ai-video-render-") as temp:
         temp = Path(temp)
         segments = []
-        for i, (kind, source, duration, fade_in, fade_out) in enumerate(normalized):
+        for i, (kind, source, duration, fade_in, fade_out, motion) in enumerate(normalized):
             segment = temp / f"scene-{i:03d}.mp4"
             cmd = [ffmpeg, "-y", "-hide_banner", "-loglevel", "error"]
             if kind == "image":
