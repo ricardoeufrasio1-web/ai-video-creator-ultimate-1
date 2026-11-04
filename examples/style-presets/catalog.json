@@ -1,0 +1,310 @@
+{
+  "schema_version": "1.0.0",
+  "note": "Extensible starting library. Presets are original descriptive recipes, not a finite list of all possible visual styles. Live-action labels are references for grading/framing; this procedural engine cannot synthesize photoreal footage.",
+  "presets": [
+    {
+      "id": "documentary-natural",
+      "name": "Documentary natural",
+      "medium": "mixed",
+      "palette": [
+        "earth neutrals",
+        "natural daylight"
+      ],
+      "visual_language": "observational framing, restrained graphics, editorial labels",
+      "camera": "steady handheld or locked-off; purposeful slow push-ins",
+      "motion": "subtle parallax and restrained title reveals",
+      "editing": "measured cuts, J/L cuts, evidence-led inserts",
+      "sound": "clean dialogue, room tone, restrained ambience"
+    },
+    {
+      "id": "ugc-authentic",
+      "name": "UGC authentic",
+      "medium": "mixed",
+      "palette": [
+        "warm natural colors"
+      ],
+      "visual_language": "casual direct address, imperfect framing cues, close product/action inserts",
+      "camera": "front-camera framing simulation, punch-ins",
+      "motion": "quick callouts and subtle emphasis",
+      "editing": "cold open, jump cuts, reaction inserts, captions",
+      "sound": "clear conversational voice, subtle taps and whooshes"
+    },
+    {
+      "id": "cinematic-noir",
+      "name": "Cinematic noir",
+      "medium": "2d",
+      "palette": [
+        "near-black",
+        "silver",
+        "single accent"
+      ],
+      "visual_language": "hard shadows, high contrast, negative space",
+      "camera": "slow push, silhouette reveals",
+      "motion": "slow masks, light sweeps, restrained grain overlays",
+      "editing": "deliberate holds, hard cuts, occasional impact",
+      "sound": "low ambience, sparse impacts"
+    },
+    {
+      "id": "cyberpunk-neon",
+      "name": "Cyberpunk neon",
+      "medium": "2d",
+      "palette": [
+        "electric cyan",
+        "magenta",
+        "deep violet"
+      ],
+      "visual_language": "glowing geometry, grid lines, futuristic interface",
+      "camera": "simulated parallax and rapid reframing",
+      "motion": "glow pulses, scan lines, HUD reveals",
+      "editing": "fast cuts, glitch accents used sparingly, speed ramps",
+      "sound": "synthetic pulses, risers, controlled impacts"
+    },
+    {
+      "id": "retro-analog",
+      "name": "Retro analog",
+      "medium": "2d",
+      "palette": [
+        "warm cream",
+        "faded red",
+        "olive"
+      ],
+      "visual_language": "paper textures, halftone, film-frame borders",
+      "camera": "static poster-like layouts and simulated zoom",
+      "motion": "flicker, grain overlay, analog title wipes",
+      "editing": "match cuts, film-burn-inspired transitions",
+      "sound": "soft tape hiss and era-appropriate licensed music"
+    },
+    {
+      "id": "flat-vector-explainer",
+      "name": "Flat vector explainer",
+      "medium": "2d",
+      "palette": [
+        "high-contrast brand palette"
+      ],
+      "visual_language": "simple shapes, icon systems, clean hierarchy",
+      "camera": "diagram pans and zooms",
+      "motion": "staggered reveals, shape morphs, path animation",
+      "editing": "information-led cuts and visual examples",
+      "sound": "clear narration, light UI accents"
+    },
+    {
+      "id": "kinetic-typography",
+      "name": "Kinetic typography",
+      "medium": "typography",
+      "palette": [
+        "high contrast"
+      ],
+      "visual_language": "oversized type, expressive scale and alignment",
+      "camera": "typographic push-ins and crops",
+      "motion": "word reveals, tracking changes, masks, bounce easing",
+      "editing": "beat cuts, phrase-based pacing, intentional pauses",
+      "sound": "voice-led with restrained per-word accents"
+    },
+    {
+      "id": "infographic-data",
+      "name": "Infographic data story",
+      "medium": "infographic",
+      "palette": [
+        "accessible categorical palette"
+      ],
+      "visual_language": "charts, labels, maps, timelines and annotations",
+      "camera": "guided pan and zoom across evidence",
+      "motion": "number counters, chart builds, callout paths",
+      "editing": "claim, evidence, interpretation, recap",
+      "sound": "narration anchored, subtle data ticks"
+    },
+    {
+      "id": "food-editorial",
+      "name": "Food editorial",
+      "medium": "mixed",
+      "palette": [
+        "warm appetizing neutrals"
+      ],
+      "visual_language": "ingredient labels, macro crop references, clean recipe cards",
+      "camera": "overhead, close-up, simulated push-ins",
+      "motion": "ingredient callouts, step reveals, timer/countdown graphics",
+      "editing": "finished-result hook, process inserts, payoff",
+      "sound": "clean narration, foley accents, gentle music"
+    },
+    {
+      "id": "sports-hype",
+      "name": "Sports hype",
+      "medium": "mixed",
+      "palette": [
+        "dark base",
+        "team accent"
+      ],
+      "visual_language": "bold score graphics, player/stat callouts, dramatic framing",
+      "camera": "rapid punch-ins and split-screen layouts",
+      "motion": "scoreboard wipes, stat builds, speed-line accents",
+      "editing": "cold open, escalating montage, replay beat, payoff",
+      "sound": "impact hits, crowd ambience only when licensed or supplied"
+    },
+    {
+      "id": "news-explainer",
+      "name": "News explainer",
+      "medium": "infographic",
+      "palette": [
+        "neutral newsroom palette"
+      ],
+      "visual_language": "clear lower thirds, maps, dates, source cards",
+      "camera": "stable layouts and guided zooms",
+      "motion": "timeline builds, map paths, data callouts",
+      "editing": "what happened, context, evidence, what next",
+      "sound": "intelligible narration, restrained bed"
+    },
+    {
+      "id": "paper-cut-collage",
+      "name": "Paper cut collage",
+      "medium": "2d",
+      "palette": [
+        "layered paper colors"
+      ],
+      "visual_language": "cut-paper shapes, visible paper edges, handmade layout",
+      "camera": "2.5D parallax",
+      "motion": "layered slides, paper flips, cutout reveals",
+      "editing": "match cuts and tactile transitions",
+      "sound": "paper foley, soft impacts"
+    },
+    {
+      "id": "clay-stopmotion-inspired",
+      "name": "Clay stop-motion inspired",
+      "medium": "2d",
+      "palette": [
+        "matte saturated colors"
+      ],
+      "visual_language": "rounded handmade forms, tactile shadows",
+      "camera": "locked miniature-stage framing",
+      "motion": "stepped pose changes and deliberate holds",
+      "editing": "pose-to-pose cuts, playful timing",
+      "sound": "soft tactile foley"
+    },
+    {
+      "id": "luxury-product",
+      "name": "Luxury product graphics",
+      "medium": "3d",
+      "palette": [
+        "black",
+        "champagne",
+        "metallic accent"
+      ],
+      "visual_language": "minimal product pedestal, reflections, generous negative space",
+      "camera": "slow orbit and macro simulated moves",
+      "motion": "soft light sweeps and precision reveals",
+      "editing": "slow reveal, detail inserts, elegant payoff",
+      "sound": "minimal tonal accents"
+    },
+    {
+      "id": "anime-inspired-original",
+      "name": "Anime-inspired original illustration",
+      "medium": "2d",
+      "palette": [
+        "expressive cinematic palette"
+      ],
+      "visual_language": "original stylized characters, expressive silhouettes, graphic speed lines",
+      "camera": "dramatic perspective and parallax",
+      "motion": "pose holds, impact frames, speed-line sweeps",
+      "editing": "action beats, reaction closeups, impact cuts",
+      "sound": "original/supplied effects; do not imitate copyrighted score"
+    },
+    {
+      "id": "pixel-arcade",
+      "name": "Pixel arcade",
+      "medium": "2d",
+      "palette": [
+        "limited retro palette"
+      ],
+      "visual_language": "pixel grids, sprite-like original figures, HUD",
+      "camera": "integer-scale framing",
+      "motion": "sprite steps, tile wipes, score counters",
+      "editing": "arcade rhythm and level transitions",
+      "sound": "original chiptune-style cues"
+    },
+    {
+      "id": "abstract-generative",
+      "name": "Abstract generative",
+      "medium": "3d",
+      "palette": [
+        "custom procedural gradient"
+      ],
+      "visual_language": "geometry, particles, fluid-like vector forms",
+      "camera": "procedural orbit and depth layers",
+      "motion": "parameter-driven particles, loops, morphs",
+      "editing": "music-reactive cuts where audio analysis exists",
+      "sound": "licensed music or original generated-by-code tones"
+    }
+  ],
+  "editing_presets": [
+    {
+      "id": "shortform-hook",
+      "name": "Short-form hook and payoff",
+      "sequence": [
+        "cold_open",
+        "curiosity_gap",
+        "fast_setup",
+        "proof_or_demo",
+        "payoff",
+        "loop_or_cta"
+      ],
+      "cut_density": "high but purposeful",
+      "captions": "phrase-led kinetic emphasis",
+      "sound": "small accents on meaningful beats"
+    },
+    {
+      "id": "sports-montage",
+      "name": "Sports montage",
+      "sequence": [
+        "impact_open",
+        "context_card",
+        "escalation_montage",
+        "replay_or_stat",
+        "payoff"
+      ],
+      "cut_density": "very_high",
+      "captions": "large short labels",
+      "sound": "impacts and licensed/supplied ambience"
+    },
+    {
+      "id": "educational-explainer",
+      "name": "Educational explainer",
+      "sequence": [
+        "question",
+        "simple_model",
+        "stepwise_evidence",
+        "example",
+        "recap"
+      ],
+      "cut_density": "medium",
+      "captions": "high readability",
+      "sound": "voice-first"
+    },
+    {
+      "id": "cinematic-story",
+      "name": "Cinematic story",
+      "sequence": [
+        "visual_hook",
+        "setup",
+        "rising_tension",
+        "turn",
+        "resolution"
+      ],
+      "cut_density": "variable",
+      "captions": "minimal",
+      "sound": "ambience and deliberate silence"
+    },
+    {
+      "id": "product-response",
+      "name": "Product response ad",
+      "sequence": [
+        "problem_visual",
+        "product_reveal",
+        "demonstration",
+        "benefit_proof",
+        "offer_or_cta"
+      ],
+      "cut_density": "medium_high",
+      "captions": "benefit callouts",
+      "sound": "clean voice and restrained accents"
+    }
+  ]
+}
