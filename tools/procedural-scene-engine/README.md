@@ -36,7 +36,7 @@ The MP4 renderer supports text, timed captions, rectangles, lines, circles, tria
 - line
 - bar
 
-Scenes support duration, background, accent, accessible description, rise/slide/pop entrances, push/pull/pan/drift/shake camera presets, and fade/wipe/circle/zoom reveal transitions. Dimensions, FPS, colors, IDs, durations and element values are validated.
+The SVG/HTML generator supports text, rectangles, circles, lines, progress bars, triangles, diamonds and stars. Set `theme.gradient` to `{ "from": "#101827", "to": "#68d5ff", "angle": 25 }` for a project-wide linear gradient, or set `gradient` on an individual scene to override it. Scenes also support duration, background, accent, accessible description, rise/slide/pop entrances, push/pull/pan/drift/shake camera presets, and fade/wipe/circle/zoom reveal transitions. Dimensions, FPS, gradient colors/angles, IDs, durations and element values are validated.
 
 ## Current limits
 
