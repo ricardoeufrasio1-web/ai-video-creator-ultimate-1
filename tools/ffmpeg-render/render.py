@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render ordered image/video scenes to MP4 using FFmpeg."""
+"""Render ordered local image/video scenes into MP4 with optional audio and soft subtitles."""
 import argparse, json, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
@@ -36,8 +36,11 @@ def main():
     ffmpeg = shutil.which("ffmpeg")
     if not ffmpeg:
         fail("FFmpeg was not found on PATH")
-    width, height = int(project.get("width", 1080)), int(project.get("height", 1920))
-    fps = int(project.get("fps", 30))
+    try:
+        width, height = int(project.get("width", 1080)), int(project.get("height", 1920))
+        fps = int(project.get("fps", 30))
+    except (TypeError, ValueError):
+        fail("Width, height, and fps must be integers")
     if not (16 <= width <= 8192 and 16 <= height <= 8192 and 1 <= fps <= 120):
         fail("Invalid width, height, or fps")
     root = project_file.parent
@@ -45,14 +48,31 @@ def main():
     for index, scene in enumerate(scenes):
         if not isinstance(scene, dict):
             fail(f"Scene {index} must be an object")
-        duration, kind = float(scene.get("duration", 0)), scene.get("type")
+        try:
+            duration = float(scene.get("duration", 0))
+        except (TypeError, ValueError):
+            fail(f"Scene {index} duration must be numeric")
+        kind = scene.get("type")
         if duration <= 0 or duration > 3600:
             fail(f"Scene {index} duration must be between 0 and 3600 seconds")
         if kind not in ("image", "video"):
             fail(f"Scene {index} type must be image or video")
         normalized.append((kind, resolve_asset(root, str(scene.get("src", ""))), duration))
         total += duration
-    audio = [(key, resolve_asset(root, project[key])) for key in ("voiceover", "music") if project.get(key)]
+    audio = []
+    for key in ("voiceover", "music"):
+        if project.get(key):
+            offset_key = key + "_offset"
+            try:
+                offset = float(project.get(offset_key, 0))
+            except (TypeError, ValueError):
+                fail(f"{offset_key} must be a number of seconds")
+            if offset < 0 or offset > 3600:
+                fail(f"{offset_key} must be between 0 and 3600 seconds")
+            audio.append((key, resolve_asset(root, project[key]), offset))
+    captions = resolve_asset(root, project["captions"]) if project.get("captions") else None
+    if captions and captions.suffix.lower() != ".srt":
+        fail("captions must reference an .srt SubRip file")
     output = Path(args.output).resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="ai-video-render-") as temp:
@@ -75,30 +95,39 @@ def main():
         silent = temp / "silent.mp4"
         run([ffmpeg, "-y", "-hide_banner", "-loglevel", "error", "-f", "concat",
              "-safe", "0", "-i", str(concat), "-c", "copy", str(silent)])
-        if not audio:
-            shutil.copy2(silent, output)
-        else:
-            cmd = [ffmpeg, "-y", "-hide_banner", "-loglevel", "error", "-i", str(silent)]
-            for _, path in audio:
-                cmd += ["-i", str(path)]
-            filters, labels = [], []
-            for n, (key, _) in enumerate(audio, start=1):
-                label = f"a{n}"
-                volume = "0.22" if key == "music" and len(audio) > 1 else "1.0"
-                filters.append(f"[{n}:a]volume={volume},apad[{label}]")
-                labels.append(f"[{label}]")
-            if len(labels) == 1:
-                filters.append(f"{labels[0]}anull[aout]")
-            else:
-                filters.append(f"{''.join(labels)}amix=inputs={len(labels)}:duration=longest:dropout_transition=2[aout]")
-            cmd += ["-filter_complex", ";".join(filters), "-map", "0:v:0", "-map", "[aout]",
-                    "-t", str(total), "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
-                    "-movflags", "+faststart", str(output)]
-            run(cmd)
+        cmd = [ffmpeg, "-y", "-hide_banner", "-loglevel", "error", "-i", str(silent)]
+        for _, path, _ in audio:
+            cmd += ["-i", str(path)]
+        if captions:
+            cmd += ["-i", str(captions)]
+        filters, labels = [], []
+        for n, (key, _, offset) in enumerate(audio, start=1):
+            label = f"a{n}"
+            volume = "0.22" if key == "music" and len(audio) > 1 else "1.0"
+            delay = int(round(offset * 1000))
+            filters.append(f"[{n}:a]volume={volume},adelay={delay}:all=1,apad[{label}]")
+            labels.append(f"[{label}]")
+        if len(labels) == 1:
+            filters.append(f"{labels[0]}anull[aout]")
+        elif len(labels) > 1:
+            filters.append(f"{''.join(labels)}amix=inputs={len(labels)}:duration=longest:dropout_transition=2[aout]")
+        if filters:
+            cmd += ["-filter_complex", ";".join(filters)]
+        cmd += ["-map", "0:v:0"]
+        if labels:
+            cmd += ["-map", "[aout]"]
+        if captions:
+            cmd += ["-map", f"{1 + len(audio)}:0", "-c:s", "mov_text"]
+        cmd += ["-t", str(total), "-c:v", "copy"]
+        if labels:
+            cmd += ["-c:a", "aac", "-b:a", "192k"]
+        cmd += ["-movflags", "+faststart", str(output)]
+        run(cmd)
     if not output.is_file() or output.stat().st_size == 0:
         fail("Render output is missing or empty")
     print(json.dumps({"status":"succeeded","output":str(output),"bytes":output.stat().st_size,
-                      "duration_seconds":round(total,3),"scenes":len(scenes)}, indent=2))
+                      "duration_seconds":round(total,3),"scenes":len(scenes),
+                      "audio_tracks":len(audio),"soft_subtitles":bool(captions)}, indent=2))
 
 if __name__ == "__main__":
     main()
