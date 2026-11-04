@@ -33,6 +33,12 @@ jobs:
             echo "Checking $file"
             node --check "$file"
           done < <(find tools -type f -name '*.mjs' | sort)
+      - name: Check Python package builder
+        run: |
+          python3 -m py_compile tools/package-skill/package.py
+          python3 tools/package-skill/package.py
+          test -s dist/ai-video-creator-ultimate.zip
+          python3 -c "import zipfile; z=zipfile.ZipFile('dist/ai-video-creator-ultimate.zip'); assert 'ai-video-creator-ultimate/SKILL.md' in z.namelist(); assert 'ai-video-creator-ultimate/modules/scriptwriting.md' in z.namelist()"
       - name: Validate sample timeline
         run: node tools/timeline-validator/validate.mjs examples/timelines/short-form.json
       - name: Generate starter composition
