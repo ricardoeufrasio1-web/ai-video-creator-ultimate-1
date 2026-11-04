@@ -1,0 +1,24 @@
+# Creative brief
+
+- **Working title:**
+- **Subject / niche:**
+- **Primary objective:**
+- **Target audience:**
+- **Audience need or problem:**
+- **Platform(s):**
+- **Aspect ratio / resolution:**
+- **Target duration:**
+- **Language / locale:**
+- **Tone / visual style:**
+- **Core message:**
+- **Hook / opening idea:**
+- **Narrative structure:**
+- **CTA (if applicable):**
+- **Required facts / sources:**
+- **Required brand elements:**
+- **Assets supplied by user:**
+- **Assets to create or source:**
+- **Budget / tool constraints:**
+- **Device / runtime available:**
+- **Rights / consent notes:**
+- **Success criteria:**
