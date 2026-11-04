@@ -154,7 +154,8 @@ def build_filter(project, project_dir):
             filters.append(f"{chain}zoompan=z='if(eq(on,0),1.12,max(1.0,zoom-0.0015))':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={width}x{height}:fps={fps},format=yuv420p[cam{i}]")
             chain = f"[cam{i}]"
         elif camera in {"pan-left", "pan-right"}:
-            x_expr = "(iw-iw/zoom)*on/nb_frames" if camera == "pan-left" else "(iw-iw/zoom)*(1-on/nb_frames)"
+            frame_count = max(1, int(duration * fps))
+            x_expr = f"(iw-iw/zoom)*on/{frame_count}" if camera == "pan-left" else f"(iw-iw/zoom)*(1-on/{frame_count})"
             filters.append(f"{chain}zoompan=z='1.06':x='{x_expr}':y='ih/2-(ih/zoom/2)':d=1:s={width}x{height}:fps={fps},format=yuv420p[cam{i}]")
             chain = f"[cam{i}]"
         label = f"scene{i}"
