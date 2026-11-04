@@ -6,107 +6,196 @@ import re
 import shutil
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 COLOR = re.compile(r"^(#[0-9a-fA-F]{6}|[a-zA-Z]{1,20})$")
+
 def safe_color(value, default):
-    if isinstance(value,str) and COLOR.fullmatch(value): return "0x"+value[1:] if value.startswith("#") else value
+    if isinstance(value, str) and COLOR.fullmatch(value):
+        return "0x" + value[1:] if value.startswith("#") else value
     return default
 
 def esc_drawtext(value):
-    # FFmpeg filtergraph escaping for drawtext's option parser.
-    return str(value).replace("\\","\\\\").replace(":","\\:").replace("'","\\'").replace("%","\\%").replace(",","\\,")
+    return str(value).replace("\\", "\\\\").replace(":", "\\:").replace("'", "\\'").replace("%", "\\%").replace(",", "\\,")
 
-def validate(project, project_dir=None):
-    errors=[]
-    if not isinstance(project,dict): return ["Project root must be an object."]
-    if not isinstance(project.get("title"),str) or not project["title"].strip(): errors.append("title must be a non-empty string.")
-    w,h,fps=project.get("width",1080),project.get("height",1920),project.get("fps",30)
-    if not isinstance(w,int) or not 64<=w<=4096: errors.append("width must be an integer from 64 to 4096.")
-    if not isinstance(h,int) or not 64<=h<=4096: errors.append("height must be an integer from 64 to 4096.")
-    if not isinstance(fps,(int,float)) or not 1<=fps<=60: errors.append("fps must be from 1 to 60.")
-    scenes=project.get("scenes")
-    if not isinstance(scenes,list) or not scenes: errors.append("scenes must be a non-empty array."); return errors
-    ids=set()
-    for i,s in enumerate(scenes):
-        if not isinstance(s,dict): errors.append(f"scenes[{i}] must be an object."); continue
-        sid=s.get("id")
-        if not isinstance(sid,str) or not sid.strip(): errors.append(f"scenes[{i}].id is required.")
-        elif sid in ids: errors.append(f"Duplicate scene id: {sid}")
-        else: ids.add(sid)
-        if not isinstance(s.get("duration"),(int,float)) or not 0<s["duration"]<=300: errors.append(f"scenes[{i}].duration must be >0 and <=300.")
-        elements=s.get("elements")
-        if not isinstance(elements,list) or not elements: errors.append(f"scenes[{i}].elements must be a non-empty array."); continue
-        for j,e in enumerate(elements):
-            if not isinstance(e,dict) or e.get("type") not in {"text","rect","line","bar"}: errors.append(f"Unsupported element at scenes[{i}].elements[{j}].")
-            elif e.get("type")=="text" and not isinstance(e.get("text"),str): errors.append(f"Text element {i}:{j} requires string text.")
-            for k in ("x","y","width","height","size","value"):
-                if isinstance(e,dict) and k in e and (not isinstance(e[k],(int,float)) or abs(e[k])>100000): errors.append(f"Invalid {k} at scenes[{i}].elements[{j}].")
+def validate(project, project_dir):
+    errors = []
+    if not isinstance(project, dict):
+        return ["Project root must be an object."]
+    if not isinstance(project.get("title"), str) or not project["title"].strip():
+        errors.append("title must be a non-empty string.")
+    w, h, fps = project.get("width", 1080), project.get("height", 1920), project.get("fps", 30)
+    if not isinstance(w, int) or not 64 <= w <= 4096:
+        errors.append("width must be an integer from 64 to 4096.")
+    if not isinstance(h, int) or not 64 <= h <= 4096:
+        errors.append("height must be an integer from 64 to 4096.")
+    if not isinstance(fps, (int, float)) or not 1 <= fps <= 60:
+        errors.append("fps must be from 1 to 60.")
+    scenes = project.get("scenes")
+    if not isinstance(scenes, list) or not scenes:
+        errors.append("scenes must be a non-empty array.")
+        return errors
+    ids = set()
+    for i, scene in enumerate(scenes):
+        if not isinstance(scene, dict):
+            errors.append(f"scenes[{i}] must be an object.")
+            continue
+        sid = scene.get("id")
+        if not isinstance(sid, str) or not sid.strip():
+            errors.append(f"scenes[{i}].id is required.")
+        elif sid in ids:
+            errors.append(f"Duplicate scene id: {sid}")
+        else:
+            ids.add(sid)
+        if not isinstance(scene.get("duration"), (int, float)) or not 0 < scene["duration"] <= 300:
+            errors.append(f"scenes[{i}].duration must be >0 and <=300.")
+        elements = scene.get("elements")
+        if not isinstance(elements, list) or not elements:
+            errors.append(f"scenes[{i}].elements must be a non-empty array.")
+            continue
+        for j, element in enumerate(elements):
+            if not isinstance(element, dict) or element.get("type") not in {"text", "rect", "line", "bar"}:
+                errors.append(f"Unsupported element at scenes[{i}].elements[{j}].")
+                continue
+            if element["type"] == "text" and not isinstance(element.get("text"), str):
+                errors.append(f"Text element {i}:{j} requires string text.")
+            for key in ("x", "y", "width", "height", "size", "value"):
+                if key in element and (not isinstance(element[key], (int, float)) or abs(element[key]) > 100000):
+                    errors.append(f"Invalid {key} at scenes[{i}].elements[{j}].")
+    for key in ("voiceover", "music"):
+        audio = project.get(key)
+        if audio is None:
+            continue
+        if not isinstance(audio, dict) or not isinstance(audio.get("src"), str) or not audio["src"].strip():
+            errors.append(f"{key} must contain a local src path.")
+            continue
+        src = (project_dir / audio["src"]).resolve()
+        try:
+            src.relative_to(project_dir.resolve())
+        except ValueError:
+            errors.append(f"{key}.src must stay inside the project directory.")
+            continue
+        if not src.is_file():
+            errors.append(f"{key} asset file not found: {src}")
+        gain, offset = audio.get("gain", 1), audio.get("offset", 0)
+        if not isinstance(gain, (int, float)) or not 0 <= gain <= 4:
+            errors.append(f"{key}.gain must be from 0 to 4.")
+        if not isinstance(offset, (int, float)) or not 0 <= offset <= 3600:
+            errors.append(f"{key}.offset must be from 0 to 3600 seconds.")
     return errors
 
-def build_filter(project):
-    w,h,fps=project.get("width",1080),project.get("height",1920),project.get("fps",30)
-    inputs=[]; filters=[]; labels=[]
-    for i,s in enumerate(project["scenes"]):
-        duration=float(s["duration"]); bg=safe_color(s.get("background",project.get("background")),"#101827")
-        inputs += ["-f","lavfi","-i",f"color=c={bg}:s={w}x{h}:r={fps}:d={duration:.6f}"]
-        chain=f"[{i}:v]"
-        for j,e in enumerate(s["elements"]):
-            typ=e["type"]; fill=safe_color(e.get("fill"),"#ffffff")
-            if typ=="text":
-                size=max(8,min(int(e.get("size",int(w*.06))),int(w*.3)))
-                x=float(e.get("x",w/2))-size*.5*len(e["text"])*.52
-                y=float(e.get("y",h/2))-size*.55
-                align=e.get("align","center")
-                if align=="left": x=float(e.get("x",0))
-                elif align=="right": x=float(e.get("x",w))-size*.5*len(e["text"])*.52
-                fontcolor=safe_color(e.get("fill"),"#ffffff")
-                weight=max(100,min(int(e.get("weight",700)),900))
-                text=esc_drawtext(e["text"])
-                filters.append(f"{chain}drawtext=text='{text}':x={x:.2f}:y={y:.2f}:fontsize={size}:fontcolor={fontcolor}:borderw={max(0,int(e.get('border',0)))}:shadowcolor=black@0.35:shadowx=2:shadowy=2[v{i}_{j}]")
-                chain=f"[v{i}_{j}]"
-            elif typ in {"rect","line"}:
-                x=int(e.get("x",w/2)); y=int(e.get("y",h/2))
-                bw=max(1,int(e.get("width",220))); bh=max(1,int(e.get("height",8 if typ=="line" else 120)))
-                if typ=="line": bh=max(1,int(e.get("strokeWidth",8)))
-                filters.append(f"{chain}drawbox=x={x}:y={y}:w={bw}:h={bh}:color={fill}@{max(0,min(float(e.get('opacity',1)),1))}:t=fill[v{i}_{j}]")
-                chain=f"[v{i}_{j}]"
-            elif typ=="bar":
-                x=int(e.get("x",w*.2)); y=int(e.get("y",h*.5)); bw=max(1,int(e.get("width",w*.6))); bh=max(1,int(e.get("height",24)))
-                val=max(0,min(float(e.get("value",.7)),1))
-                track=safe_color(e.get("track"),"#334155")
-                filters.append(f"{chain}drawbox=x={x}:y={y}:w={bw}:h={bh}:color={track}:t=fill[v{i}_{j}a]")
-                filters.append(f"[v{i}_{j}a]drawbox=x={x}:y={y}:w={max(1,int(bw*val))}:h={bh}:color={fill}:t=fill[v{i}_{j}]")
-                chain=f"[v{i}_{j}]"
-        out=f"scene{i}"
-        filters.append(f"{chain}format=yuv420p[{out}]")
-        labels.append(f"[{out}]")
-    if len(labels)==1:
-        filters.append(f"{labels[0]}null[outv]")
+def build_filter(project, project_dir):
+    width, height, fps = project.get("width", 1080), project.get("height", 1920), project.get("fps", 30)
+    inputs, filters, video_labels = [], [], []
+    for i, scene in enumerate(project["scenes"]):
+        duration = float(scene["duration"])
+        background = safe_color(scene.get("background", project.get("background")), "0x101827")
+        inputs += ["-f", "lavfi", "-i", f"color=c={background}:s={width}x{height}:r={fps}:d={duration:.6f}"]
+        chain = f"[{i}:v]"
+        for j, element in enumerate(scene["elements"]):
+            kind = element["type"]
+            fill = safe_color(element.get("fill"), "0xffffff")
+            if kind == "text":
+                size = max(8, min(int(element.get("size", int(width * .06))), int(width * .3)))
+                text_value = esc_drawtext(element["text"])
+                x = float(element.get("x", width / 2)) - size * .5 * len(element["text"]) * .52
+                y = float(element.get("y", height / 2)) - size * .55
+                if element.get("align") == "left":
+                    x = float(element.get("x", 0))
+                elif element.get("align") == "right":
+                    x = float(element.get("x", width)) - size * .5 * len(element["text"]) * .52
+                font_color = safe_color(element.get("fill"), "0xffffff")
+                border = max(0, int(element.get("border", 0)))
+                filters.append(f"{chain}drawtext=text='{text_value}':x={x:.2f}:y={y:.2f}:fontsize={size}:fontcolor={font_color}:borderw={border}:shadowcolor=black@0.35:shadowx=2:shadowy=2[v{i}_{j}]")
+                chain = f"[v{i}_{j}]"
+            elif kind in {"rect", "line"}:
+                x, y = int(element.get("x", width / 2)), int(element.get("y", height / 2))
+                box_width = max(1, int(element.get("width", 220)))
+                box_height = max(1, int(element.get("height", 8 if kind == "line" else 120)))
+                if kind == "line":
+                    box_height = max(1, int(element.get("strokeWidth", 8)))
+                opacity = max(0, min(float(element.get("opacity", 1)), 1))
+                filters.append(f"{chain}drawbox=x={x}:y={y}:w={box_width}:h={box_height}:color={fill}@{opacity}:t=fill[v{i}_{j}]")
+                chain = f"[v{i}_{j}]"
+            elif kind == "bar":
+                x, y = int(element.get("x", width * .2)), int(element.get("y", height * .5))
+                box_width, box_height = max(1, int(element.get("width", width * .6))), max(1, int(element.get("height", 24)))
+                value = max(0, min(float(element.get("value", .7)), 1))
+                track = safe_color(element.get("track"), "0x334155")
+                filters.append(f"{chain}drawbox=x={x}:y={y}:w={box_width}:h={box_height}:color={track}:t=fill[v{i}_{j}a]")
+                filters.append(f"[v{i}_{j}a]drawbox=x={x}:y={y}:w={max(1, int(box_width * value))}:h={box_height}:color={fill}:t=fill[v{i}_{j}]")
+                chain = f"[v{i}_{j}]"
+        label = f"scene{i}"
+        filters.append(f"{chain}format=yuv420p[{label}]")
+        video_labels.append(f"[{label}]")
+    if len(video_labels) == 1:
+        filters.append(f"{video_labels[0]}null[outv]")
     else:
-        filters.append("".join(labels)+f"concat=n={len(labels)}:v=1:a=0[outv]")
-    return inputs, ";".join(filters)
+        filters.append("".join(video_labels) + f"concat=n={len(video_labels)}:v=1:a=0[outv]")
+
+    total_duration = sum(float(scene["duration"]) for scene in project["scenes"])
+    audio_labels = []
+    for key in ("voiceover", "music"):
+        spec = project.get(key)
+        if spec is None:
+            continue
+        source = (project_dir / spec["src"]).resolve()
+        if key == "music":
+            inputs += ["-stream_loop", "-1"]
+        inputs += ["-i", str(source)]
+        input_index = len(project["scenes"]) + len(audio_labels)
+        gain, delay = float(spec.get("gain", 1)), int(float(spec.get("offset", 0)) * 1000)
+        label = f"audio{input_index}"
+        filters.append(f"[{input_index}:a]volume={gain:.4f},adelay={delay}:all=1,apad,atrim=duration={total_duration:.6f}[{label}]")
+        audio_labels.append(f"[{label}]")
+    if len(audio_labels) == 1:
+        filters.append(f"{audio_labels[0]}anull[aout]")
+    elif len(audio_labels) > 1:
+        filters.append("".join(audio_labels) + f"amix=inputs={len(audio_labels)}:duration=longest:dropout_transition=2,alimiter=limit=0.95[aout]")
+    return inputs, ";".join(filters), bool(audio_labels)
 
 def main():
-    ap=argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("project",type=Path)
-    ap.add_argument("--output",type=Path,required=True)
-    ap.add_argument("--ffmpeg",default="ffmpeg")
-    args=ap.parse_args()
-    if not shutil.which(args.ffmpeg): print("ERROR: FFmpeg executable not found.",file=sys.stderr); return 2
-    try: project=json.loads(args.project.read_text(encoding="utf-8"))
-    except Exception as exc: print(f"ERROR: Cannot read project JSON: {exc}",file=sys.stderr); return 2
-    errors=validate(project,args.project.resolve().parent)
-    if errors: print("ERROR: "+"\n".join(errors),file=sys.stderr); return 2
-    args.output.parent.mkdir(parents=True,exist_ok=True)
-    inputs,graph=build_filter(project)
-    cmd=[args.ffmpeg,"-hide_banner","-loglevel","error","-y",*inputs,"-filter_complex",graph,"-map","[outv]","-an","-c:v","libx264","-preset","ultrafast","-crf","20","-pix_fmt","yuv420p","-movflags","+faststart",str(args.output)]
-    run=subprocess.run(cmd,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    if run.returncode:
-        print("ERROR: FFmpeg render failed: "+run.stderr[-3000:],file=sys.stderr); return run.returncode
-    if not args.output.is_file() or args.output.stat().st_size==0: print("ERROR: Render output missing or empty.",file=sys.stderr); return 2
-    print(json.dumps({"status":"rendered","output":str(args.output),"bytes":args.output.stat().st_size,"duration_seconds":sum(float(s["duration"]) for s in project["scenes"]),"scenes":len(project["scenes"]),"dimensions":f'{project.get("width",1080)}x{project.get("height",1920)}',"fps":project.get("fps",30),"audio":"mixed local voiceover/music" if has_audio else "none"},indent=2))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("project", type=Path)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--ffmpeg", default="ffmpeg")
+    args = parser.parse_args()
+    if not shutil.which(args.ffmpeg):
+        print("ERROR: FFmpeg executable not found.", file=sys.stderr)
+        return 2
+    try:
+        project = json.loads(args.project.read_text(encoding="utf-8"))
+    except Exception as exc:
+        print(f"ERROR: Cannot read project JSON: {exc}", file=sys.stderr)
+        return 2
+    project_dir = args.project.resolve().parent
+    errors = validate(project, project_dir)
+    if errors:
+        print("ERROR: " + "\n".join(errors), file=sys.stderr)
+        return 2
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    inputs, graph, has_audio = build_filter(project, project_dir)
+    command = [args.ffmpeg, "-hide_banner", "-loglevel", "error", "-y", *inputs, "-filter_complex", graph, "-map", "[outv]"]
+    if has_audio:
+        command += ["-map", "[aout]", "-c:a", "aac", "-b:a", "192k"]
+    else:
+        command += ["-an"]
+    command += ["-c:v", "libx264", "-preset", "ultrafast", "-crf", "20", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(args.output)]
+    result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if result.returncode:
+        print("ERROR: FFmpeg render failed: " + result.stderr[-3000:], file=sys.stderr)
+        return result.returncode
+    if not args.output.is_file() or args.output.stat().st_size == 0:
+        print("ERROR: Render output missing or empty.", file=sys.stderr)
+        return 2
+    print(json.dumps({
+        "status": "rendered", "output": str(args.output), "bytes": args.output.stat().st_size,
+        "duration_seconds": sum(float(scene["duration"]) for scene in project["scenes"]),
+        "scenes": len(project["scenes"]),
+        "dimensions": f'{project.get("width", 1080)}x{project.get("height", 1920)}',
+        "fps": project.get("fps", 30), "audio": "mixed local voiceover/music" if has_audio else "none"
+    }, indent=2))
     return 0
 
-if __name__=="__main__": raise SystemExit(main())
+if __name__ == "__main__":
+    raise SystemExit(main())
