@@ -83,6 +83,17 @@ class RendererValidationTests(unittest.TestCase):
             self.assertIn("fit within the project duration", result.stderr)
             self.assertFalse(output.exists())
 
+    def test_scene_fade_longer_than_scene_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            folder = Path(temp)
+            (folder / "frame.ppm").write_bytes(b"P6\\n1 1\\n255\\n\\x00\\x00\\x00")
+            result, output = self.run_project(folder, {
+                "scenes": [{"type": "image", "src": "frame.ppm", "duration": 1, "fade_in": 1.1}],
+            })
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("invalid fade values", result.stderr)
+            self.assertFalse(output.exists())
+
     def test_invalid_scene_type_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             folder = Path(temp)
