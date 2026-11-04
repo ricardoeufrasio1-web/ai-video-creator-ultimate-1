@@ -129,3 +129,8 @@ For platform-neutral installation, capability levels, provider adapter expectati
 - Example adapter capability descriptor: `examples/providers/adapter.example.json`
 
 Do not describe a provider adapter as implemented merely because its contract or example exists. The current repository still needs concrete provider integrations and a verified real MP4 render.
+
+
+## Local MP4 rendering adapter (experimental)
+
+When Python and FFmpeg are available, the agent may use `tools/ffmpeg-render/render.py` to assemble a local timeline of image/video assets and optional voiceover/music into MP4. Read `tools/ffmpeg-render/README.md` for its deliberately limited schema and constraints. Do not describe this as AI generation, full HyperFrames timeline support, or automatic publishing. CI performs a deterministic FFmpeg render smoke test; final projects still require visual/audio review.
