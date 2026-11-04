@@ -35,6 +35,16 @@
           "value": 0.72,
           "fill": "#fbbf24",
           "track": "#334155"
+        },
+        {
+          "type": "caption",
+          "text": "UM EXEMPLO DE LEGENDA",
+          "x": 160,
+          "y": 490,
+          "size": 15,
+          "fill": "#ffffff",
+          "delay": 0.2,
+          "duration": 1.1
         }
       ],
       "camera": "zoom-in"
