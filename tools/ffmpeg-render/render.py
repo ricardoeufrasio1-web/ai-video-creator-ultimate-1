@@ -45,9 +45,14 @@ def main():
         fail("Invalid width, height, or fps")
     transition = project.get("transition")
     transition_duration = 0.0
+    transition_effect = "fade"
     if transition is not None:
         if not isinstance(transition, dict) or transition.get("type") != "crossfade":
             fail("transition must be an object with type crossfade")
+        transition_effect = transition.get("effect", "fade")
+        allowed_effects = ("fade", "dissolve", "wipeleft", "wiperight", "slideleft", "slideright", "circleopen", "circleclose")
+        if transition_effect not in allowed_effects:
+            fail("transition.effect must be one of: " + ", ".join(allowed_effects))
         try:
             transition_duration = float(transition.get("duration", 0.5))
         except (TypeError, ValueError):
@@ -162,7 +167,7 @@ def main():
                 output_label = f"[xf{i}]"
                 offset = elapsed - transition_duration
                 transition_filters.append(
-                    f"{previous}[{i}:v]xfade=transition=fade:duration={transition_duration}:offset={offset}{output_label}"
+                    f"{previous}[{i}:v]xfade=transition={transition_effect}:duration={transition_duration}:offset={offset}{output_label}"
                 )
                 previous = output_label
                 elapsed += normalized[i][2] - transition_duration
@@ -225,6 +230,7 @@ def main():
                       "duration_seconds":round(total,3),"scenes":len(scenes),
                       "audio_tracks":len(audio) + len(normalized_cues),"audio_cues":len(normalized_cues),
                       "transition":transition.get("type") if transition else "hard_cut",
+                      "transition_effect":transition_effect if transition else None,
                       "soft_subtitles":bool(captions)}, indent=2))
 
 if __name__ == "__main__":
