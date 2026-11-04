@@ -62,7 +62,7 @@ def validate(project, project_dir):
                 continue
             if element["type"] == "text" and not isinstance(element.get("text"), str):
                 errors.append(f"Text element {i}:{j} requires string text.")
-            for key in ("x", "y", "width", "height", "size", "value"):
+            for key in ("x", "y", "width", "height", "size", "value", "delay"):
                 if key in element and (not isinstance(element[key], (int, float)) or abs(element[key]) > 100000):
                     errors.append(f"Invalid {key} at scenes[{i}].elements[{j}].")
     transition = project.get("transition")
@@ -124,7 +124,8 @@ def build_filter(project, project_dir):
                     x = float(element.get("x", width)) - size * .5 * len(element["text"]) * .52
                 font_color = safe_color(element.get("fill"), "0xffffff")
                 border = max(0, int(element.get("border", 0)))
-                filters.append(f"{chain}drawtext=text='{text_value}':x={x:.2f}:y={y:.2f}:fontsize={size}:fontcolor={font_color}:borderw={border}:shadowcolor=black@0.35:shadowx=2:shadowy=2[v{i}_{j}]")
+                delay = max(0, float(element.get("delay", 0)))
+                filters.append(f"{chain}drawtext=text='{text_value}':x={x:.2f}:y={y:.2f}:fontsize={size}:fontcolor={font_color}:borderw={border}:shadowcolor=black@0.35:shadowx=2:shadowy=2:enable='gte(t,{delay:.4f})'[v{i}_{j}]")
                 chain = f"[v{i}_{j}]"
             elif kind in {"rect", "line"}:
                 x, y = int(element.get("x", width / 2)), int(element.get("y", height / 2))
@@ -133,15 +134,17 @@ def build_filter(project, project_dir):
                 if kind == "line":
                     box_height = max(1, int(element.get("strokeWidth", 8)))
                 opacity = max(0, min(float(element.get("opacity", 1)), 1))
-                filters.append(f"{chain}drawbox=x={x}:y={y}:w={box_width}:h={box_height}:color={fill}@{opacity}:t=fill[v{i}_{j}]")
+                delay = max(0, float(element.get("delay", 0)))
+                filters.append(f"{chain}drawbox=x={x}:y={y}:w={box_width}:h={box_height}:color={fill}@{opacity}:t=fill:enable='gte(t,{delay:.4f})'[v{i}_{j}]")
                 chain = f"[v{i}_{j}]"
             elif kind == "bar":
                 x, y = int(element.get("x", width * .2)), int(element.get("y", height * .5))
                 box_width, box_height = max(1, int(element.get("width", width * .6))), max(1, int(element.get("height", 24)))
                 value = max(0, min(float(element.get("value", .7)), 1))
                 track = safe_color(element.get("track"), "0x334155")
-                filters.append(f"{chain}drawbox=x={x}:y={y}:w={box_width}:h={box_height}:color={track}:t=fill[v{i}_{j}a]")
-                filters.append(f"[v{i}_{j}a]drawbox=x={x}:y={y}:w={max(1, int(box_width * value))}:h={box_height}:color={fill}:t=fill[v{i}_{j}]")
+                delay = max(0, float(element.get("delay", 0)))
+                filters.append(f"{chain}drawbox=x={x}:y={y}:w={box_width}:h={box_height}:color={track}:t=fill:enable='gte(t,{delay:.4f})'[v{i}_{j}a]")
+                filters.append(f"[v{i}_{j}a]drawbox=x={x}:y={y}:w={max(1, int(box_width * value))}:h={box_height}:color={fill}:t=fill:enable='gte(t,{delay:.4f})'[v{i}_{j}]")
                 chain = f"[v{i}_{j}]"
         camera = scene.get("camera", "static")
         if camera == "zoom-in":
