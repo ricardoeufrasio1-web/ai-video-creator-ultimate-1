@@ -1,0 +1,21 @@
+{
+  "title": "Short-form product explainer",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "assets": [
+    { "id": "voice-main", "type": "audio", "path": "assets/voiceover.wav" },
+    { "id": "music-bed", "type": "audio", "path": "assets/music.wav" },
+    { "id": "product-shot", "type": "video", "path": "assets/product-shot.mp4" }
+  ],
+  "scenes": [
+    { "id": "hook", "start": 0, "duration": 3, "assetId": "product-shot" },
+    { "id": "benefit", "start": 3, "duration": 5 },
+    { "id": "cta", "start": 8, "duration": 3 }
+  ],
+  "audioCues": [
+    { "id": "voice-hook", "assetId": "voice-main", "role": "narration", "start": 0, "duration": 3 },
+    { "id": "voice-benefit", "assetId": "voice-main", "role": "narration", "start": 3, "duration": 5 },
+    { "id": "music-full", "assetId": "music-bed", "role": "music", "start": 0, "duration": 11 }
+  ]
+}
