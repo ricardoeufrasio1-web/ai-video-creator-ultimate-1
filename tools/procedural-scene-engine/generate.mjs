@@ -48,7 +48,9 @@ function renderElement(x, w, h, index, theme) {
   return '<g class="element enter e'+index+'"><rect x="'+xx+'" y="'+yy+'" width="'+bw+'" height="'+bh+'" rx="'+(bh/2)+'" fill="'+color(x.track,"#334155")+'"/><rect x="'+xx+'" y="'+yy+'" width="'+(bw*value)+'" height="'+bh+'" rx="'+(bh/2)+'" fill="'+fill+'"/></g>';
 }
 function build(p) {
-  const w=p.width??1080,h=p.height??1920,fps=p.fps??30;\n  const theme={background:color(p.theme?.background??p.background,"#101827"),accent:color(p.theme?.accent??p.accent,"#68d5ff"),text:color(p.theme?.text,"#ffffff"),muted:color(p.theme?.muted,"#c6d0dc")};\n  const bg=theme.background,accent=theme.accent;
+  const w=p.width??1080,h=p.height??1920,fps=p.fps??30;
+  const theme={background:color(p.theme?.background??p.background,"#101827"),accent:color(p.theme?.accent??p.accent,"#68d5ff"),text:color(p.theme?.text,"#ffffff"),muted:color(p.theme?.muted,"#c6d0dc")};
+  const bg=theme.background,accent=theme.accent;
   let cursor=0;
   const scenes=p.scenes.map((s,i)=>{
     const dur=s.duration,start=cursor; cursor+=dur;
