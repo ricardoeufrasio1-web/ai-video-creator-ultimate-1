@@ -4,6 +4,16 @@ This dependency-free Node.js tool creates a self-contained HTML/SVG composition 
 
 ## Run
 
+Create a narrated MP4 from one JSON project in a single command (Node.js is not required for this render path; Python, FFmpeg, FFprobe and eSpeak NG must be installed):
+
+```bash
+python3 tools/procedural-scene-engine/run_pipeline.py examples/procedural-scenes/one-command-video.json --output ./output/final.mp4 --report ./output/qa-report.json
+```
+
+The pipeline optionally synthesizes narration locally, renders the video, probes the actual MP4 streams and writes a QA metadata report. `provider_calls: 0` means no remote media provider was called. It does not claim that automated metadata checks replace watching/listening to the final video.
+
+
+
 ```bash
 node tools/procedural-scene-engine/generate.mjs examples/procedural-scenes/vertical-explainer.json ./output/vertical-explainer
 ```
