@@ -18,7 +18,7 @@ def esc_drawtext(value):
     # FFmpeg filtergraph escaping for drawtext's option parser.
     return str(value).replace("\\","\\\\").replace(":","\\:").replace("'","\\'").replace("%","\\%").replace(",","\\,")
 
-def validate(project):
+def validate(project, project_dir=None):
     errors=[]
     if not isinstance(project,dict): return ["Project root must be an object."]
     if not isinstance(project.get("title"),str) or not project["title"].strip(): errors.append("title must be a non-empty string.")
@@ -97,7 +97,7 @@ def main():
     if not shutil.which(args.ffmpeg): print("ERROR: FFmpeg executable not found.",file=sys.stderr); return 2
     try: project=json.loads(args.project.read_text(encoding="utf-8"))
     except Exception as exc: print(f"ERROR: Cannot read project JSON: {exc}",file=sys.stderr); return 2
-    errors=validate(project)
+    errors=validate(project,args.project.resolve().parent)
     if errors: print("ERROR: "+"\n".join(errors),file=sys.stderr); return 2
     args.output.parent.mkdir(parents=True,exist_ok=True)
     inputs,graph=build_filter(project)
@@ -106,7 +106,7 @@ def main():
     if run.returncode:
         print("ERROR: FFmpeg render failed: "+run.stderr[-3000:],file=sys.stderr); return run.returncode
     if not args.output.is_file() or args.output.stat().st_size==0: print("ERROR: Render output missing or empty.",file=sys.stderr); return 2
-    print(json.dumps({"status":"rendered","output":str(args.output),"bytes":args.output.stat().st_size,"duration_seconds":sum(float(s["duration"]) for s in project["scenes"]),"scenes":len(project["scenes"]),"dimensions":f'{project.get("width",1080)}x{project.get("height",1920)}',"fps":project.get("fps",30),"audio":"none"},indent=2))
+    print(json.dumps({"status":"rendered","output":str(args.output),"bytes":args.output.stat().st_size,"duration_seconds":sum(float(s["duration"]) for s in project["scenes"]),"scenes":len(project["scenes"]),"dimensions":f'{project.get("width",1080)}x{project.get("height",1920)}',"fps":project.get("fps",30),"audio":"mixed local voiceover/music" if has_audio else "none"},indent=2))
     return 0
 
 if __name__=="__main__": raise SystemExit(main())
