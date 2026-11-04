@@ -53,6 +53,34 @@ class RendererValidationTests(unittest.TestCase):
             self.assertIn("Asset file not found", result.stderr)
             self.assertFalse(output.exists())
 
+
+    def test_audio_cue_duplicate_ids_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            folder = Path(temp)
+            (folder / "tone.wav").write_bytes(b"fake audio")
+            result, output = self.run_project(folder, {
+                "scenes": [{"type": "image", "src": "missing-image.png", "duration": 2}],
+                "audio_cues": [
+                    {"id": "same", "src": "tone.wav", "start": 0, "duration": 1},
+                    {"id": "same", "src": "tone.wav", "start": 1, "duration": 1},
+                ],
+            })
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("unique non-empty id", result.stderr)
+            self.assertFalse(output.exists())
+
+    def test_audio_cue_outside_timeline_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            folder = Path(temp)
+            (folder / "tone.wav").write_bytes(b"fake audio")
+            result, output = self.run_project(folder, {
+                "scenes": [{"type": "image", "src": "missing-image.png", "duration": 2}],
+                "audio_cues": [{"id": "cue", "src": "tone.wav", "start": 1.5, "duration": 1}],
+            })
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("fit within the project duration", result.stderr)
+            self.assertFalse(output.exists())
+
     def test_invalid_scene_type_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             folder = Path(temp)
