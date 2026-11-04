@@ -57,7 +57,7 @@ def validate(project, project_dir):
             errors.append(f"scenes[{i}].elements must be a non-empty array.")
             continue
         for j, element in enumerate(elements):
-            if not isinstance(element, dict) or element.get("type") not in {"text", "caption", "rect", "line", "bar"}:
+            if not isinstance(element, dict) or element.get("type") not in {"text", "caption", "rect", "line", "bar", "circle", "triangle", "diamond", "star"}:
                 errors.append(f"Unsupported element at scenes[{i}].elements[{j}].")
                 continue
             if element["type"] in {"text", "caption"} and not isinstance(element.get("text"), str):
@@ -144,6 +144,15 @@ def build_filter(project, project_dir):
                 opacity = max(0, min(float(element.get("opacity", 1)), 1))
                 delay = max(0, float(element.get("delay", 0)))
                 filters.append(f"{chain}drawbox=x={x}:y={y}:w={box_width}:h={box_height}:color={fill}@{opacity}:t=fill:enable='gte(t,{delay:.4f})'[v{i}_{j}]")
+                chain = f"[v{i}_{j}]"
+            elif kind in {"circle", "triangle", "diamond", "star"}:
+                glyphs = {"circle": "●", "triangle": "▲", "diamond": "◆", "star": "★"}
+                size = max(8, min(int(element.get("size", 120)), int(width * .5)))
+                x = float(element.get("x", width / 2)) - size * .5
+                y = float(element.get("y", height / 2)) - size * .55
+                delay = max(0, float(element.get("delay", 0)))
+                opacity = max(0, min(float(element.get("opacity", 1)), 1))
+                filters.append(f"{chain}drawtext=text='{glyphs[kind]}':x={x:.2f}:y={y:.2f}:fontsize={size}:fontcolor={fill}@{opacity}:shadowcolor=black@0.25:shadowx=2:shadowy=2:enable='gte(t,{delay:.4f})'[v{i}_{j}]")
                 chain = f"[v{i}_{j}]"
             elif kind == "bar":
                 x, y = int(element.get("x", width * .2)), int(element.get("y", height * .5))
