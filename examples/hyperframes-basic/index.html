@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Video Creator Ultimate — HyperFrames starter</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+    body {
+      background: radial-gradient(circle at 50% 42%, #263449 0%, #101722 58%, #080c12 100%);
+      color: #fff;
+      font-family: Inter, Arial, sans-serif;
+    }
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+    .eyebrow {
+      position: absolute; top: 350px; left: 180px; right: 180px;
+      text-align: center; color: #9ed9ff; font-size: 28px;
+      letter-spacing: 9px; font-weight: 700; opacity: 0;
+    }
+    .headline {
+      position: absolute; top: 420px; left: 150px; right: 150px;
+      margin: 0; text-align: center; font-size: 100px;
+      line-height: 1.08; letter-spacing: -4px; font-weight: 800;
+      opacity: 0;
+    }
+    .subtitle {
+      position: absolute; top: 570px; left: 260px; right: 260px;
+      text-align: center; color: #c6d0dc; font-size: 34px;
+      line-height: 1.4; opacity: 0;
+    }
+    .accent {
+      position: absolute; width: 220px; height: 8px; border-radius: 8px;
+      left: 850px; top: 690px; background: #69c8ff; transform: scaleX(0);
+    }
+  </style>
+</head>
+<body>
+  <div id="root" data-composition-id="ai-video-creator-starter"
+       data-start="0" data-width="1920" data-height="1080">
+    <div class="eyebrow clip" data-start="0" data-duration="5"
+         data-track-index="0">AI VIDEO PRODUCTION</div>
+    <h1 class="headline clip" data-start="0" data-duration="5"
+        data-track-index="1">From idea to video.</h1>
+    <p class="subtitle clip" data-start="0.6" data-duration="4.4"
+       data-track-index="2">A modular workflow for research, storytelling and editing.</p>
+    <div class="accent clip" data-start="0.8" data-duration="4.2"
+         data-track-index="3"></div>
+  </div>
+
+  <!-- For production, pin GSAP locally instead of relying on a CDN. -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script>
+    const timeline = gsap.timeline({ paused: true });
+    timeline
+      .to(".eyebrow", { opacity: 1, y: -8, duration: 0.7, ease: "power2.out" }, 0.2)
+      .to(".headline", { opacity: 1, y: -12, duration: 0.9, ease: "power3.out" }, 0.45)
+      .to(".subtitle", { opacity: 1, y: -6, duration: 0.8, ease: "power2.out" }, 1.1)
+      .to(".accent", { scaleX: 1, duration: 0.8, ease: "power2.inOut" }, 1.35);
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines["ai-video-creator-starter"] = timeline;
+  </script>
+</body>
+</html>
