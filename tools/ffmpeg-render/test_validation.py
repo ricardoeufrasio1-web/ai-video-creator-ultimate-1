@@ -108,6 +108,17 @@ class RendererValidationTests(unittest.TestCase):
             self.assertIn("transition.effect must be one of", result.stderr)
             self.assertFalse(output.exists())
 
+    def test_invalid_audio_normalization_range_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            folder = Path(temp)
+            result, output = self.run_project(folder, {
+                "scenes": [{"type": "image", "src": "frame.png", "duration": 1}],
+                "audio_normalization": {"integrated_lufs": -80},
+            })
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("targets are out of supported ranges", result.stderr)
+            self.assertFalse(output.exists())
+
     def test_invalid_scene_type_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             folder = Path(temp)
