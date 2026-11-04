@@ -249,7 +249,7 @@ def main():
                       "audio_tracks":len(audio) + len(normalized_cues),"audio_cues":len(normalized_cues),
                       "transition":transition.get("type") if transition else "hard_cut",
                       "transition_effect":transition_effect if transition else None,
-                      "soft_subtitles":bool(captions),"audio_normalization":bool(normalization_filter)}, indent=2))
+                      "soft_subtitles":bool(captions),"audio_normalization":bool(normalization_filter and labels)}, indent=2))
 
 if __name__ == "__main__":
     main()
