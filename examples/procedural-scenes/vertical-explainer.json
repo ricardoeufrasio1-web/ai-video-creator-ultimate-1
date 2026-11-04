@@ -26,6 +26,7 @@
       "title": "Simple visual fact",
       "animation": "slide",
       "camera": "pan-left",
+      "transition": "wipe-left",
       "elements": [
         {"type":"text","text":"HYDRATION","x":540,"y":550,"size":76,"fill":"#68d5ff"},
         {"type":"text","text":"supports normal body functions","x":540,"y":680,"size":44,"weight":600,"fill":"#ffffff"},
