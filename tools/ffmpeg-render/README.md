@@ -14,6 +14,14 @@ See examples/render/ffmpeg-render-fixture.json. Asset paths are relative to the 
     python3 tools/ffmpeg-render/render.py examples/render/ffmpeg-render-fixture.json --output /tmp/demo.mp4
     ffprobe -v error -show_streams -show_format -of json /tmp/demo.mp4
 
+## Validation tests
+
+Run the renderer input-validation tests with:
+
+    python3 tools/ffmpeg-render/test_validation.py
+
+These tests cover empty scene lists, path traversal attempts, missing assets, and unsupported scene types. The CI workflow runs them before rendering its MP4 fixture.
+
 ## Current limitations
 - Hard cuts only; no transitions, animated text, captions, or motion graphics.
 - Audio starts at time zero; no per-scene cue placement, ducking automation, or loudness normalization.
