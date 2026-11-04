@@ -58,3 +58,8 @@ Include the final video, editable source, asset manifest, captions when requeste
 ## Failure behavior
 
 Report the exact failed stage and useful error output. Do not claim a render succeeded if it did not. If the runtime is unavailable, stop at a portable project and setup instructions.
+
+
+## Experimental local FFmpeg adapter
+
+The repository includes `tools/ffmpeg-render/render.py` as a first executable MP4 path. It supports ordered image/video scenes, hard cuts, normalized dimensions/FPS, and optional voiceover/music starting at time zero. See its README for limitations. The CI job creates synthetic local media, renders a real MP4 with FFmpeg, and checks the resulting streams using FFprobe. This is a renderer smoke test, not a test of AI media generation, full timeline conversion, or human perceptual QA.
