@@ -57,14 +57,19 @@ def validate(project, project_dir):
             errors.append(f"scenes[{i}].elements must be a non-empty array.")
             continue
         for j, element in enumerate(elements):
-            if not isinstance(element, dict) or element.get("type") not in {"text", "rect", "line", "bar"}:
+            if not isinstance(element, dict) or element.get("type") not in {"text", "caption", "rect", "line", "bar"}:
                 errors.append(f"Unsupported element at scenes[{i}].elements[{j}].")
                 continue
-            if element["type"] == "text" and not isinstance(element.get("text"), str):
+            if element["type"] in {"text", "caption"} and not isinstance(element.get("text"), str):
                 errors.append(f"Text element {i}:{j} requires string text.")
-            for key in ("x", "y", "width", "height", "size", "value", "delay"):
+            for key in ("x", "y", "width", "height", "size", "value", "delay", "duration"):
                 if key in element and (not isinstance(element[key], (int, float)) or abs(element[key]) > 100000):
                     errors.append(f"Invalid {key} at scenes[{i}].elements[{j}].")
+            if element.get("type") == "caption":
+                delay = element.get("delay", 0)
+                caption_duration = element.get("duration", scene.get("duration", 0) - delay)
+                if not isinstance(delay, (int, float)) or delay < 0 or not isinstance(caption_duration, (int, float)) or caption_duration <= 0 or delay + caption_duration > scene.get("duration", 0):
+                    errors.append(f"Caption timing must fit inside scenes[{i}].duration.")
     transition = project.get("transition")
     if transition is not None:
         allowed = {"fade", "dissolve", "wipeleft", "wiperight", "slideleft", "slideright", "circleopen", "circleclose"}
@@ -113,11 +118,11 @@ def build_filter(project, project_dir):
         for j, element in enumerate(scene["elements"]):
             kind = element["type"]
             fill = safe_color(element.get("fill"), "0xffffff")
-            if kind == "text":
+            if kind in {"text", "caption"}:
                 size = max(8, min(int(element.get("size", int(width * .06))), int(width * .3)))
                 text_value = esc_drawtext(element["text"])
                 x = float(element.get("x", width / 2)) - size * .5 * len(element["text"]) * .52
-                y = float(element.get("y", height / 2)) - size * .55
+                y = float(element.get("y", height * .82 if kind == "caption" else height / 2)) - size * .55
                 if element.get("align") == "left":
                     x = float(element.get("x", 0))
                 elif element.get("align") == "right":
@@ -125,7 +130,10 @@ def build_filter(project, project_dir):
                 font_color = safe_color(element.get("fill"), "0xffffff")
                 border = max(0, int(element.get("border", 0)))
                 delay = max(0, float(element.get("delay", 0)))
-                filters.append(f"{chain}drawtext=text='{text_value}':x={x:.2f}:y={y:.2f}:fontsize={size}:fontcolor={font_color}:borderw={border}:shadowcolor=black@0.35:shadowx=2:shadowy=2:enable='gte(t,{delay:.4f})'[v{i}_{j}]")
+                end = delay + float(element.get("duration", duration - delay)) if kind == "caption" else None
+                box = ":box=1:boxcolor=black@0.62:boxborderw=12" if kind == "caption" else ""
+                timing = f"between(t,{delay:.4f},{end:.4f})" if kind == "caption" else f"gte(t,{delay:.4f})"
+                filters.append(f"{chain}drawtext=text='{text_value}':x={x:.2f}:y={y:.2f}:fontsize={size}:fontcolor={font_color}:borderw={border}:shadowcolor=black@0.35:shadowx=2:shadowy=2{box}:enable='{timing}'[v{i}_{j}]")
                 chain = f"[v{i}_{j}]"
             elif kind in {"rect", "line"}:
                 x, y = int(element.get("x", width / 2)), int(element.get("y", height / 2))
