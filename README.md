@@ -1,6 +1,6 @@
 # AI Video Creator Ultimate
 
-A universal, portable Agent Skill and modular toolkit for planning and producing videos across niches, platforms, languages, and formats — from research and scripting to assets, editing, quality assurance, rendering, and publishing handoff.
+A universal, portable Agent Skill and autonomous procedural video-production toolkit. Its default direction is to create original visuals, animation, dynamic edits and MP4s from code and supplied assets without requiring remote AI image/video generation services.
 
 ## One skill, compatible agents
 
@@ -28,6 +28,16 @@ Output:
 
 The package includes the complete existing `SKILL.md`, docs, modules, tools, examples, and templates. It excludes Git metadata, CI config, caches, and generated outputs.
 
+## Product direction: one autonomous video engine
+
+The goal is not a prompt pack that sends users to other generators. The default path is a provider-free procedural engine for original vector scenes, motion graphics, typography, diagrams, charts, 2D/2.5D animation, transitions, sound synchronization and MP4 assembly. It supports an extensible visual-style catalog and dynamic editing grammar, with presets for documentary, UGC, commercial, food, travel, sports, news, education, storytelling, illustration, collage, 2D/3D-inspired graphics, infographic, kinetic typography and hybrid styles. Custom combinations are supported.
+
+No finite catalog can literally contain every style or editing technique; the system is designed to extend. Viral editing techniques can improve pacing and retention but cannot guarantee virality.
+
+Important boundary: code-generated visuals can create polished animated and graphic-led videos, but cannot autonomously produce arbitrary photorealistic footage or natural human performances without source footage or a generative model. MP4 rendering still requires an Agent Skills host with code execution, filesystem access and a working renderer. A text-only chat cannot render files.
+
+See docs/style-catalog.md, modules/procedural-visual-engine.md, modules/viral-editing-language.md, and docs/autonomous-engine-roadmap.md.
+
 ## Capabilities
 
 - Turns an idea, brief, article, product, script, or source assets into a production plan.
@@ -46,7 +56,7 @@ The package includes the complete existing `SKILL.md`, docs, modules, tools, exa
 4. **Generation providers:** generate images, video, voice, and audio where connected and authorized.
 5. **Publishing integrations:** publish only when connected and explicitly approved.
 
-A Skill does not install missing tools or bypass subscriptions, quotas, API keys, compute limits, storage, or platform permissions. Image, video, voice, and music providers may charge fees or restrict commercial use.
+A Skill does not install missing execution tools, compute, storage, or platform permissions. The default procedural visual path is designed not to require remote image/video generation APIs. Optional providers may incur charges and are never silently required.
 
 ## Existing toolkit and honest limitations
 
@@ -101,3 +111,8 @@ A chat that does not support Agent Skills can still use the instructions by atta
 ## First real MP4 renderer
 
 An experimental local FFmpeg renderer is available at `tools/ffmpeg-render/`. It assembles ordered local image/video scenes and optional voiceover/music into MP4. Run `python3 tools/ffmpeg-render/create_fixture.py` and then follow `tools/ffmpeg-render/README.md`. GitHub Actions renders a deterministic 2.5-second MP4 fixture with fades, animated zoom, a selectable dissolve transition, positioned audio, and a selectable SRT subtitle stream; FFprobe validates the output streams and metadata. This proves the local renderer path, not AI asset generation or social publishing.
+
+
+## Implementation status — important
+
+The repository currently contains an experimental FFmpeg assembly renderer and procedural-engine design specifications. The new style catalog, editing grammar and autonomous engine roadmap document the target. They do not mean the full procedural animation engine is already implemented. The next engineering milestone is executable scene generation, reusable animation components, renderer integration and end-to-end tests. Do not advertise the complete autonomous engine as ready until those acceptance tests pass.
