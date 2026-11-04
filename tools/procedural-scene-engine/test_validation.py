@@ -38,6 +38,11 @@ class ProceduralValidationTests(unittest.TestCase):
         errors = validate(self.project, self.folder)
         self.assertTrue(any("Unsupported camera" in error for error in errors))
 
+    def test_rejects_caption_outside_scene(self):
+        self.project["scenes"][0]["elements"].append({"type": "caption", "text": "late", "delay": 1.2, "duration": 0.5})
+        errors = validate(self.project, self.folder)
+        self.assertTrue(any("Caption timing" in error for error in errors))
+
     def test_rejects_transition_longer_than_scene(self):
         self.project["transition"] = {"type": "crossfade", "duration": 2, "effect": "fade"}
         errors = validate(self.project, self.folder)
