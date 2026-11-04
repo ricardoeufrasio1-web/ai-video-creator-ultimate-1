@@ -10,6 +10,7 @@ A universal, modular skill for planning and producing videos across niches, plat
 - Uses **HyperFrames as the preferred editing/rendering workflow** when the environment supports it.
 - Includes a Node.js starter generator for text-based HyperFrames compositions.
 - Includes an asset preflight checker for local media paths and rights metadata.
+- Includes a timeline validator for scene timing, asset references, and audio cue ranges.
 - Uses FFmpeg for media operations when available; treats Remotion and other systems as optional adapters.
 - Produces a publishing pack: titles, descriptions, captions, thumbnails concepts, credits, and source notes.
 
@@ -30,7 +31,7 @@ Typical environment requirements may include Node.js 22+, FFmpeg, and a compatib
 
 ## Project generator
 
-The starter generator uses Node.js built-ins and accepts a small text-only JSON schema. It creates an `index.html` composition and preserves the source JSON. It does not generate images, video, voice, or music, and it does not render MP4. See [project schema](docs/project-schema.md) and [generator guide](tools/project-generator/README.md). Use [asset preflight](tools/asset-preflight/README.md) to check media paths and rights metadata before editing.
+The starter generator uses Node.js built-ins and accepts a small text-only JSON schema. It creates an `index.html` composition and preserves the source JSON. It does not generate images, video, voice, or music, and it does not render MP4. See [project schema](docs/project-schema.md) and [generator guide](tools/project-generator/README.md). Use [asset preflight](tools/asset-preflight/README.md) to check media paths and rights metadata before editing. Use [timeline validation](tools/timeline-validator/README.md) to check scene timing and audio cue structure.
 
 ## Requirements and limitations
 
@@ -50,6 +51,7 @@ The starter generator uses Node.js built-ins and accepts a small text-only JSON 
 - `docs/project-schema.md` — starter JSON project format.
 - `tools/project-generator/` — Node.js project generator.
 - `tools/asset-preflight/` — local media manifest checker.
+- `tools/timeline-validator/` — scene and audio cue timeline validator.
 - `examples/assets/` — example asset manifest.
 - `examples/hyperframes-basic/` — HTML composition and JSON example.
 - `templates/asset-manifest.csv` — reusable asset tracking sheet.
@@ -62,6 +64,7 @@ The starter generator uses Node.js built-ins and accepts a small text-only JSON 
 - `modules/asset-production.md` — asset planning and production.
 - `modules/timeline-orchestration.md` — frame-accurate timeline planning.
 - `modules/media-management.md` — asset organization, provenance, and rights preflight.
+- `modules/audio-synchronization.md` — narration, music, effects, and cue synchronization.
 - `modules/automation.md` — repeatable generation and validation.
 - `modules/editing-hyperframes.md` — HyperFrames-first editing.
 - `modules/audio.md` — narration, music, and sound design.
