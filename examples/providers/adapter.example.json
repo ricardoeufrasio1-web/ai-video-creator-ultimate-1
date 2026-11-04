@@ -1,0 +1,39 @@
+{
+  "adapter_contract_version": "1.0",
+  "provider": "example-provider",
+  "capabilities": [
+    "image.generate",
+    "video.generate",
+    "speech.synthesize"
+  ],
+  "operations": {
+    "image.generate": {
+      "input_schema": {
+        "prompt": "string",
+        "aspect_ratio": "string",
+        "output_format": "string"
+      },
+      "output_schema": {
+        "status": "succeeded|queued|failed|needs_approval",
+        "assets": [
+          {
+            "asset_id": "string",
+            "file_ref": "host-provided-file-reference",
+            "mime_type": "image/png",
+            "width": 1024,
+            "height": 1024
+          }
+        ],
+        "usage": {
+          "amount": 0,
+          "unit": "provider-reported-unit"
+        }
+      }
+    }
+  },
+  "security": {
+    "credentials_source": "host-secret-manager",
+    "never_log_credentials": true,
+    "requires_user_approval_for_paid_usage": true
+  }
+}
