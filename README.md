@@ -100,4 +100,4 @@ A chat that does not support Agent Skills can still use the instructions by atta
 
 ## First real MP4 renderer
 
-An experimental local FFmpeg renderer is available at `tools/ffmpeg-render/`. It assembles ordered local image/video scenes and optional voiceover/music into MP4. Run `python3 tools/ffmpeg-render/create_fixture.py` and then follow `tools/ffmpeg-render/README.md`. GitHub Actions now renders a deterministic two-second MP4 fixture and validates its video/audio streams with FFprobe. This proves the local renderer path, not AI asset generation or social publishing.
+An experimental local FFmpeg renderer is available at `tools/ffmpeg-render/`. It assembles ordered local image/video scenes and optional voiceover/music into MP4. Run `python3 tools/ffmpeg-render/create_fixture.py` and then follow `tools/ffmpeg-render/README.md`. GitHub Actions renders a deterministic 2.5-second MP4 fixture with fades, animated zoom, a selectable dissolve transition, positioned audio, and a selectable SRT subtitle stream; FFprobe validates the output streams and metadata. This proves the local renderer path, not AI asset generation or social publishing.
