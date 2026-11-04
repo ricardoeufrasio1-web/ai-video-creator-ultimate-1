@@ -1,38 +1,61 @@
 # HyperFrames-first workflow
 
-HyperFrames is the preferred editing/rendering reference for this skill. It is an external dependency and is not included in this repository.
+HyperFrames is the preferred composition and rendering workflow for this skill. It is an external dependency and is not bundled in this repository.
 
-## Before setup
+## Current documented prerequisites
 
-1. Open the official [HyperFrames repository](https://github.com/heygen-com/hyperframes) and current documentation.
-2. Confirm the current supported Node.js version, installation commands, FFmpeg requirements, browser/runtime requirements, and license.
-3. Check the operating system and whether the user has a desktop or remote runtime. A mobile-only user may need a cloud/desktop environment.
-4. Install only from trusted upstream sources and pin versions for reproducibility.
+The current HyperFrames quickstart documents Node.js 22+ and FFmpeg for local MP4 rendering. The CLI's `doctor` command checks the local environment. Confirm the requirements for the exact version installed and operating system before setup.
 
-## Composition principles
+Official references:
+- [Quickstart](https://hyperframes.app/docs/1-startup/2-quickstart)
+- [CLI](https://hyperframes.app/docs/5-packages/cli)
+- [Rendering](https://hyperframes.app/docs/3-guides/4-rendering)
+- [HyperFrames repository](https://github.com/heygen-com/hyperframes)
 
-- Build scenes as explicit HTML/CSS/JavaScript compositions.
-- Use frame-based timing and seekable animation timelines.
-- Keep media local and validated before rendering.
-- Register animation timelines according to the installed HyperFrames version's documented API.
-- Use deterministic values; avoid wall-clock time and unseeded randomness.
-- Keep fonts, images, audio, and video paths stable and relative to the project where possible.
+## Create a project
 
-## Production sequence
+Use the current CLI. A documented non-interactive starter command is:
 
-1. Create or initialize a project using the current upstream instructions.
-2. Add media and verify codecs, dimensions, frame rates, and durations.
-3. Compose scenes and transitions with explicit start/end frames.
-4. Run available lint, validation, or browser checks.
-5. Preview the complete timeline and inspect scene boundaries.
-6. Render using the current documented CLI/API.
-7. Inspect the resulting MP4 with a media probe and visual playback.
-8. Archive the source project, asset manifest, and export settings.
+```bash
+npx hyperframes init my-video --example blank --non-interactive
+```
 
-## Rendering reliability
+Exact accepted flags can vary by release. Run `npx hyperframes init --help` to confirm.
 
-Check that the render has the expected duration, frame rate, resolution, audio stream, and no missing frames/assets. For deterministic rendering, avoid runtime network fetches and unstable time/random sources.
+A typical project contains a root composition such as `index.html`, metadata, a compositions folder, and an assets folder. Treat the generated project as authoritative for its installed version.
+
+## Everyday project loop
+
+```bash
+npx hyperframes doctor
+npx hyperframes preview
+npx hyperframes lint
+npx hyperframes check
+npx hyperframes snapshot --at 0,2,5
+npx hyperframes render --output output.mp4
+```
+
+Run commands from the project directory. Check `npx hyperframes <command> --help` for exact flags. Adapt snapshot times to the actual composition duration.
+
+## Composition structure
+
+The documented HTML composition model uses a root element with a composition ID and canvas dimensions. Timed elements use clip metadata such as start time, duration, and track index. Animations must be seekable; GSAP timelines are paused and registered in `window.__timelines` under the matching composition ID.
+
+See `examples/hyperframes-basic/` for an original minimal composition. It loads GSAP from a CDN for demonstration only. For production, pin dependencies locally and avoid network requests during rendering.
+
+## Production principles
+
+- Use explicit timing and a single project frame rate.
+- Keep media local and validate all paths before render.
+- Use deterministic, seekable animation; avoid wall-clock time and unseeded randomness.
+- Run diagnostics, lint, browser/layout checks, preview, and boundary snapshots.
+- Inspect the final MP4 with media metadata tools and visual playback.
+- Keep source HTML, assets, manifest, and export settings with the project.
+
+## Docker and reproducibility
+
+HyperFrames documents Docker rendering as an option for more reproducible output. Use it only when Docker is available and the current CLI version supports the required flags. Do not make Docker a prerequisite for every user.
 
 ## Fallback
 
-If HyperFrames cannot run in the available environment, do not fake a render. Deliver the composition source, asset folder structure, and a clear set of steps for a compatible machine or remote runner.
+If the user is on a phone without access to a compatible remote/desktop runtime, prepare the project and provide exact next steps. Do not claim to have run a local render.
