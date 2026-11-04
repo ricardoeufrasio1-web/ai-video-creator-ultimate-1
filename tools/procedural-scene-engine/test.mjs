@@ -16,6 +16,7 @@ try {
   assert.match(html,/NEEDS WATER/);
   assert.match(html,/animation-delay:3s/);
   assert.match(html,/<svg/);
+  assert.match(html,/camera-push-in/);
   assert.doesNotMatch(html,/<script[^>]+src=/i);
   console.log("Procedural scene engine smoke test passed.");
 } finally { await rm(temp,{recursive:true,force:true}); }
