@@ -48,5 +48,15 @@ jobs:
           node tools/project-generator/generate.mjs examples/hyperframes-basic/project.json "$RUNNER_TEMP/ai-video-creator-test/generated"
           test -s "$RUNNER_TEMP/ai-video-creator-test/generated/index.html"
           test -s "$RUNNER_TEMP/ai-video-creator-test/generated/project.json"
+      - name: Render real MP4 fixture with FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python3 -m py_compile tools/ffmpeg-render/render.py tools/ffmpeg-render/create_fixture.py
+          python3 tools/ffmpeg-render/create_fixture.py
+          python3 tools/ffmpeg-render/render.py examples/render/ffmpeg-render-fixture.json --output "$RUNNER_TEMP/ai-video-render-test.mp4"
+          test -s "$RUNNER_TEMP/ai-video-render-test.mp4"
+          ffprobe -v error -show_streams -show_format -of json "$RUNNER_TEMP/ai-video-render-test.mp4" > "$RUNNER_TEMP/ffprobe-output.json"
+          node tools/render-preflight/check-render.mjs "$RUNNER_TEMP/ffprobe-output.json" --expect-width 320 --expect-height 180 --expect-fps 24 --expect-duration 2 --require-audio
       - name: Check sample render metadata
         run: node tools/render-preflight/check-render.mjs examples/render/ffprobe-output.example.json --expect-width 1080 --expect-height 1920 --expect-fps 30 --expect-duration 30 --require-audio
