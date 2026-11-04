@@ -40,7 +40,9 @@ jobs:
           test -s dist/ai-video-creator-ultimate.zip
           python3 -c "import zipfile; z=zipfile.ZipFile('dist/ai-video-creator-ultimate.zip'); assert 'ai-video-creator-ultimate/SKILL.md' in z.namelist(); assert 'ai-video-creator-ultimate/modules/scriptwriting.md' in z.namelist()"
       - name: Validate sample timeline
-        run: node tools/timeline-validator/validate.mjs examples/timelines/short-form.json
+        run: |
+          node tools/timeline-validator/validate.mjs examples/timelines/short-form.json
+          node tools/timeline-validator/test.mjs
       - name: Generate starter composition
         shell: bash
         run: |
