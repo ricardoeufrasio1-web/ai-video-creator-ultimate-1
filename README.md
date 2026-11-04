@@ -82,3 +82,17 @@ Original documentation and skill files are licensed under MIT; see [LICENSE](LIC
 This project follows the open Agent Skills folder convention. Import it into any AI chat/agent that explicitly supports Agent Skills. The format makes the instructions portable; it does not guarantee that every host can execute scripts, generate media, render MP4, or publish. Those actions require tools, workspace access, runtime dependencies, provider connections, and permissions supplied by the host.
 
 For compatibility guidance and the current execution limits, see [docs/agent-compatibility.md](docs/agent-compatibility.md).
+
+## Build a portable installation ZIP
+
+If you have Python 3.9+ and a local/cloud workspace with this repository checked out, run:
+
+```bash
+python3 tools/package-skill/package.py
+```
+
+This creates `dist/ai-video-creator-ultimate.zip` and the matching folder. The archive includes the existing modules, docs, tools, examples, and templates so the skill's relative references remain available. Import the ZIP only in agents that explicitly support skill archive imports.
+
+A chat that does not support Agent Skills can still use the instructions by attaching the files, but that is not a persistent installation. See [the compatibility guide](docs/agent-compatibility.md).
+
+**Important:** the portable package carries the workflow and utilities already in this repository; it does not magically add image/video/voice providers, a hosted rendering server, paid credits, or social account permissions. Current gaps are listed in the compatibility guide.
