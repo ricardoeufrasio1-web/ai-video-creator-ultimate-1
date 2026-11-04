@@ -11,7 +11,8 @@ from pathlib import Path
 
 COLOR = re.compile(r"^(#[0-9a-fA-F]{6}|[a-zA-Z]{1,20})$")
 def safe_color(value, default):
-    return value if isinstance(value,str) and COLOR.fullmatch(value) else default
+    if isinstance(value,str) and COLOR.fullmatch(value): return "0x"+value[1:] if value.startswith("#") else value
+    return default
 
 def esc_drawtext(value):
     # FFmpeg filtergraph escaping for drawtext's option parser.
