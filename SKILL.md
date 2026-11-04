@@ -80,3 +80,11 @@ Load the relevant module guidance for the task instead of applying every special
 - `modules/publishing.md` — metadata, captions, credits, and handoff.
 
 Select modules according to the user's request, available tools, and production stage. The core workflow remains usable when a module or external tool is unavailable.
+
+
+## Project assets and render pipeline
+
+- Use `docs/render-pipeline.md` for the complete preflight-to-delivery process.
+- Use `templates/asset-manifest.csv` to track source, rights, dimensions, duration, and continuity for every asset.
+- Use `examples/hyperframes-basic/` as a minimal original HyperFrames composition reference; do not assume its CDN-loaded GSAP setup is suitable for offline production.
+- Use the current HyperFrames CLI diagnostics, lint, check, snapshot, preview, and render commands as documented upstream. Confirm exact flags with the installed CLI.
