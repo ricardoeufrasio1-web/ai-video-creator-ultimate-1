@@ -18,7 +18,7 @@ Open the generated index.html in a modern browser to preview it. The output cont
 - line
 - bar
 
-Scenes support duration, background, accent, accessible description and simple rise/slide/pop entrance presets. Dimensions, FPS, colors, IDs, durations and element values are validated.
+Scenes support duration, background, accent, accessible description, rise/slide/pop entrances, push/pull/pan/drift/shake camera presets, and fade/wipe/circle/zoom reveal transitions. Dimensions, FPS, colors, IDs, durations and element values are validated.
 
 ## Current limits
 
