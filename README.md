@@ -1,62 +1,72 @@
 # AI Video Creator Ultimate
 
-A universal, modular skill for planning and producing videos across niches, platforms, languages, and formats — from research and scripting to storyboarding, asset planning, editing, quality assurance, and publishing.
+A universal, portable Agent Skill and modular toolkit for planning and producing videos across niches, platforms, languages, and formats — from research and scripting to assets, editing, quality assurance, rendering, and publishing handoff.
+
+## One skill, compatible agents
+
+This project follows the open Agent Skills folder format: a directory with a `SKILL.md` file plus optional scripts, references, examples, and assets. It is designed to be imported into any AI chat/agent that implements Agent Skills. The format does not guarantee that every chat can execute scripts, generate media, render video, or publish; those capabilities depend on the host agent and its connected tools.
+
+## Install / import
+
+- **GitHub import:** use the host agent's Skills/Extensions import feature and provide this public repository URL: https://github.com/ricardoeufrasio1-web/ai-video-creator-ultimate-1
+- **ZIP import:** download or generate the portable ZIP described below, then import the ZIP if the host supports it.
+- **Manual:** provide the `SKILL.md` and supporting folder to an agent that supports local skill folders.
+
+The exact import UI differs by product. Some chat products do not support installing skills; in those, attach the skill files or paste the instructions for that conversation. A chat that cannot execute code can still use the planning, scriptwriting, storyboard, prompt, and publishing-pack workflows.
+
+## Build a portable ZIP
+
+Requires Python 3.9+ on a computer or cloud workspace with this repository checked out:
+
+```bash
+python3 tools/package-skill/package.py
+```
+
+Output:
+- `dist/ai-video-creator-ultimate/` — portable skill folder.
+- `dist/ai-video-creator-ultimate.zip` — importable archive for hosts that accept skill ZIPs.
+
+The package includes the complete existing `SKILL.md`, docs, modules, tools, examples, and templates. It excludes Git metadata, CI config, caches, and generated outputs.
 
 ## Capabilities
 
 - Turns an idea, brief, article, product, script, or source assets into a production plan.
-- Supports educational, documentary, marketing, recipes, entertainment, news, storytelling, tutorials, and more.
+- Supports educational, documentary, marketing, recipe, entertainment, news, storytelling, tutorial, product, and other niches.
 - Creates timed scripts, storyboards, shot lists, scene prompts, continuity notes, and asset manifests.
-- Uses **HyperFrames as the preferred editing/rendering workflow** when the environment supports it.
-- Includes Node.js starter generation plus asset, timeline, and rendered-output metadata preflight tools.
-- Uses FFmpeg for media operations when available; treats Remotion and other systems as optional adapters.
+- Uses HyperFrames as the preferred editing/rendering workflow when the environment supports it.
+- Includes project generation plus asset, timeline, and rendered-output metadata preflight tools.
+- Uses FFmpeg for media operations when available; treats Remotion and other renderers as optional adapters.
 - Produces publishing metadata, captions, thumbnail concepts, credits, and source notes.
 
-## Quick start
+## Execution levels
 
-1. Read [SKILL.md](SKILL.md).
-2. Define audience, goal, platform, format, duration, language, tone, and CTA.
-3. Follow [the end-to-end workflow](docs/workflow.md) and [production checklist](docs/production-checklist.md).
-4. Use the brief and storyboard templates in [templates/](templates/).
-5. Generate a starter composition with [project-generator](tools/project-generator/README.md) and [the example JSON](examples/hyperframes-basic/project.json).
-6. Check local assets with [asset preflight](tools/asset-preflight/README.md) and scene timing with [timeline validation](tools/timeline-validator/README.md).
-7. After an actual render, export metadata with FFprobe and run [render preflight](tools/render-preflight/README.md).
-8. For HyperFrames, follow [the HyperFrames workflow](docs/hyperframes-workflow.md) and verify current upstream CLI instructions.
+1. **Chat only:** plan, research (if browsing exists), script, storyboard, prompts, and handoff.
+2. **Files/workspace:** create editable project files and package outputs.
+3. **Media runtime:** run renderer/FFmpeg and verify actual MP4 output.
+4. **Generation providers:** generate images, video, voice, and audio where connected and authorized.
+5. **Publishing integrations:** publish only when connected and explicitly approved.
 
-## Preferred editing engine: HyperFrames
+A Skill does not install missing tools or bypass subscriptions, quotas, API keys, compute limits, storage, or platform permissions. Image, video, voice, and music providers may charge fees or restrict commercial use.
 
-HyperFrames is the primary composition/rendering reference. It supports HTML/CSS/JavaScript-based video compositions and a frame-oriented rendering pipeline. It is **not bundled** here. Install it separately and review its current license, dependencies, and runtime requirements.
+## Existing toolkit and honest limitations
 
-Typical requirements may include Node.js 22+, FFmpeg, and a compatible browser/runtime. Exact requirements can change by version and operating system. Do not assume a phone-only environment can run the full renderer.
-
-## Included tools and limitations
-
-- **Project generator:** creates a text-based HTML starter composition and copies source JSON. It does not generate images, video, voice, music, or MP4.
+- **Project generator:** creates a text-based HTML starter composition and copies source JSON. It does not generate AI media or render MP4.
 - **Asset preflight:** checks manifest structure, local paths, and missing rights metadata. It cannot prove ownership or licensing.
 - **Timeline validator:** checks scene timing, frame alignment, asset IDs, and audio cue ranges. It does not render or prove synchronization.
 - **Render preflight:** checks FFprobe metadata such as streams, dimensions, FPS, and duration. It does not decode every frame or listen to audio.
 
-## Quality automation
+GitHub Actions validates JSON, JavaScript syntax, sample timeline validation, starter generation, and sample render metadata. CI passing does not replace actual rendering or visual/audio review.
 
-GitHub Actions runs JSON parsing, JavaScript syntax checks, sample timeline validation, starter project generation, and render-metadata preflight on pushes to `main`, pull requests, and manual runs. See [testing guide](docs/testing.md). CI passing does not replace manual visual/audio review or licensing checks.
+## Preferred renderer
 
-## Requirements and limitations
-
-- This repository is a skill and production toolkit, not a hosted video-generation service.
-- Image, video, voice, music, and model providers may charge fees, impose quotas, or restrict commercial use.
-- Free/open-source tools are preferred where practical; unlimited free generation is never guaranteed.
-- Claim a rendered MP4 only after an actual render has completed and the file has been verified.
-- When rendering is unavailable, deliver an editable project, assets, and clear setup/render instructions.
+HyperFrames is the primary composition/rendering reference. It is not bundled. Install it separately and review its current license, dependencies, and runtime requirements. Node.js 22+, FFmpeg, and a compatible browser/runtime may be required depending on version. Verify the installed CLI's current help before use.
 
 ## Repository map
 
-- `SKILL.md` — main skill instructions.
-- `docs/` — architecture, workflow, providers, schema, licensing, render pipeline, testing, checklist, and troubleshooting.
+- `SKILL.md` — main universal skill instructions.
+- `docs/` — architecture, compatibility, workflow, providers, schema, licensing, render pipeline, testing, checklist, and troubleshooting.
 - `modules/` — research, scripting, creative direction, asset production, editing, timeline, motion, voice, audio, captions, QA, and publishing specialists.
-- `tools/project-generator/` — Node.js project generator.
-- `tools/asset-preflight/` — local media manifest checker.
-- `tools/timeline-validator/` — scene and audio cue timeline validator.
-- `tools/render-preflight/` — FFprobe metadata checker for actual rendered output.
+- `tools/` — project generator, asset preflight, timeline validator, render preflight, and portable package builder.
 - `examples/` — starter composition, asset manifest, timeline, and FFprobe metadata examples.
 - `templates/` — creative brief, storyboard, and asset tracking templates.
 - `.github/workflows/quality.yml` — automated repository checks.
