@@ -19,4 +19,4 @@ with wave.open(str(out / "voice.wav"), "wb") as wav:
     for i in range(rate):
         data.extend(struct.pack("<h", int(4000*math.sin(2*math.pi*440*i/rate))))
     wav.writeframes(data)
-print(f"Created render fixtures in {out}")
+(out / "captions.srt").write_text("1\\n00:00:00,200 --> 00:00:01,800\\nAutomated caption test\\n", encoding="utf-8")\nprint(f"Created render fixtures in {out}")
