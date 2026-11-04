@@ -42,7 +42,7 @@ See docs/style-catalog.md, modules/procedural-visual-engine.md, modules/viral-ed
 
 - Turns an idea, brief, article, product, script, or source assets into a production plan.
 - Supports educational, documentary, marketing, recipe, entertainment, news, storytelling, tutorial, product, and other niches.
-- Creates timed scripts, storyboards, shot lists, scene prompts, continuity notes, and asset manifests.
+- Creates timed scripts, storyboards, shot lists, scene prompts, continuity notes, and asset manifests.\n- Includes an initial provider-free procedural SVG/HTML scene generator and a limited FFmpeg MP4 renderer for text and vector primitives.
 - Uses HyperFrames as the preferred editing/rendering workflow when the environment supports it.
 - Includes project generation plus asset, timeline, and rendered-output metadata preflight tools.
 - Uses FFmpeg for media operations when available; treats Remotion and other renderers as optional adapters.
@@ -76,7 +76,7 @@ HyperFrames is the primary composition/rendering reference. It is not bundled. I
 - `SKILL.md` — main universal skill instructions.
 - `docs/` — architecture, compatibility, workflow, providers, schema, licensing, render pipeline, testing, checklist, and troubleshooting.
 - `modules/` — research, scripting, creative direction, asset production, editing, timeline, motion, voice, audio, captions, QA, and publishing specialists.
-- `tools/` — project generator, asset preflight, timeline validator, render preflight, and portable package builder.
+- `tools/` — procedural scene generator/renderer, project generator, FFmpeg renderer, asset preflight, timeline validator, render preflight, and portable package builder.
 - `examples/` — starter composition, asset manifest, timeline, and FFprobe metadata examples.
 - `templates/` — creative brief, storyboard, and asset tracking templates.
 - `.github/workflows/quality.yml` — automated repository checks.
