@@ -128,7 +128,7 @@ For platform-neutral installation, capability levels, provider adapter expectati
 - Full timeline-to-render implementation plan and acceptance criteria: `docs/full-render-integration-plan.md`
 - Example adapter capability descriptor: `examples/providers/adapter.example.json`
 
-Do not describe a provider adapter as implemented merely because its contract or example exists. The current repository still needs concrete provider integrations and a verified real MP4 render.
+Do not describe a provider adapter as implemented merely because its contract or example exists. The current repository still needs concrete provider integrations and broader end-to-end media review.
 
 
 ## Local MP4 rendering adapter (experimental)
