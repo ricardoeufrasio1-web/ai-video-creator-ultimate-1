@@ -18,7 +18,7 @@ The engine should support a broad, extensible range of visual languages: live-ac
 
 For attention-focused editing, use modules/viral-editing-language.md: hooks, pattern interrupts, pacing, punch-ins, match cuts, speed ramps, dynamic transitions, kinetic typography, sound accents, visual resets, payoff and loop endings. Virality is never guaranteed; clarity, truth and accessibility take priority.
 
-The no-provider engine can generate procedural graphics, original vector scenes, 2D/2.5D animation, motion design and complete edits from supplied assets. It cannot create arbitrary photorealistic footage or natural human performances without source footage or a generative model. Never imply otherwise. Rendering also requires a host that can execute code and write files; a text-only chat cannot render an MP4.
+The no-provider engine can generate procedural graphics, original vector scenes, geometric glyphs (circles, triangles, diamonds, stars), 2D/2.5D animation, motion design and complete edits from supplied assets. It cannot create arbitrary photorealistic footage or natural human performances without source footage or a generative model. Never imply otherwise. Rendering also requires a host that can execute code and write files; a text-only chat cannot render an MP4.
 
 
 A portable, modular workflow for producing videos across educational, documentary, marketing, recipe, entertainment, news, storytelling, tutorial, product, and other niches. This skill is designed for any agent that supports the open Agent Skills format. It is not tied to one chat provider.
