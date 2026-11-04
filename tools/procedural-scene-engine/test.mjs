@@ -22,7 +22,7 @@ try {
   assert.match(html,/<polygon points=/);
   assert.match(html,/<linearGradient id="bg-gradient-0"/);
   assert.match(html,/stop-color="#101827"/);
-  assert.match(html,/stop-color="#68d5ff"/);
+  assert.match(html,/stop-color="#1d4ed8"/);
   assert.match(html,/star/);
   assert.doesNotMatch(html,/<script[^>]+src=/i);
   const invalid=path.join(temp,"invalid-gradient.json");
