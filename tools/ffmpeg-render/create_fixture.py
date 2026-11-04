@@ -20,4 +20,9 @@ with wave.open(str(out / "voice.wav"), "wb") as wav:
         data.extend(struct.pack("<h", int(4000*math.sin(2*math.pi*440*i/rate))))
     wav.writeframes(data)
 (out / "captions.srt").write_text("1\n00:00:00,200 --> 00:00:01,800\nAutomated caption test\n", encoding="utf-8")
+with (out / "fixture2.ppm").open("wb") as f:
+    f.write(f"P6\n{w} {h}\n255\n".encode("ascii"))
+    for y in range(h):
+        for x in range(w):
+            f.write(bytes((180, int(120+100*x/w), int(40+150*y/h))))
 print(f"Created render fixtures in {out}")
