@@ -70,6 +70,35 @@ def main():
             if offset < 0 or offset > 3600:
                 fail(f"{offset_key} must be between 0 and 3600 seconds")
             audio.append((key, resolve_asset(root, project[key]), offset))
+    cues = project.get("audio_cues", [])
+    if not isinstance(cues, list):
+        fail("audio_cues must be an array")
+    normalized_cues = []
+    cue_ids = set()
+    for index, cue in enumerate(cues):
+        if not isinstance(cue, dict):
+            fail(f"Audio cue {index} must be an object")
+        cue_id = str(cue.get("id", "")).strip()
+        if not cue_id or cue_id in cue_ids:
+            fail(f"Audio cue {index} requires a unique non-empty id")
+        cue_ids.add(cue_id)
+        try:
+            start = float(cue.get("start", 0))
+            duration = float(cue.get("duration", total - start))
+            gain = float(cue.get("gain", 1))
+            fade_in = float(cue.get("fade_in", 0))
+            fade_out = float(cue.get("fade_out", 0))
+        except (TypeError, ValueError):
+            fail(f"Audio cue {index} start/duration/gain/fades must be numeric")
+        if start < 0 or duration <= 0 or start >= total or start + duration > total + 0.001:
+            fail(f"Audio cue {index} must fit within the project duration")
+        if gain < 0 or gain > 4 or fade_in < 0 or fade_out < 0 or fade_in > duration or fade_out > duration:
+            fail(f"Audio cue {index} has invalid gain or fade values")
+        role = cue.get("role", "sfx")
+        if role not in ("narration", "music", "sfx", "ambience", "dialogue"):
+            fail(f"Audio cue {index} role is unsupported")
+        normalized_cues.append((cue_id, resolve_asset(root, str(cue.get("src", ""))), role,
+                                start, duration, gain, fade_in, fade_out))
     captions = resolve_asset(root, project["captions"]) if project.get("captions") else None
     if captions and captions.suffix.lower() != ".srt":
         fail("captions must reference an .srt SubRip file")
@@ -98,6 +127,8 @@ def main():
         cmd = [ffmpeg, "-y", "-hide_banner", "-loglevel", "error", "-i", str(silent)]
         for _, path, _ in audio:
             cmd += ["-i", str(path)]
+        for _, path, _, _, _, _, _, _ in normalized_cues:
+            cmd += ["-i", str(path)]
         if captions:
             cmd += ["-i", str(captions)]
         filters, labels = [], []
@@ -105,7 +136,17 @@ def main():
             label = f"a{n}"
             volume = "0.22" if key == "music" and len(audio) > 1 else "1.0"
             delay = int(round(offset * 1000))
-            filters.append(f"[{n}:a]volume={volume},adelay={delay}:all=1,apad[{label}]")
+            filters.append(f"[{n}:a]volume={volume},adelay={delay}:all=1,apad=whole_dur={total}[{label}]")
+            labels.append(f"[{label}]")
+        for n, (_, _, role, start, duration, gain, fade_in, fade_out) in enumerate(normalized_cues, start=1 + len(audio)):
+            label = f"cue{n}"
+            chain = f"[{n}:a]atrim=duration={duration},asetpts=PTS-STARTPTS,volume={gain}"
+            if fade_in:
+                chain += f",afade=t=in:st=0:d={fade_in}"
+            if fade_out:
+                chain += f",afade=t=out:st={max(0, duration-fade_out)}:d={fade_out}"
+            chain += f",adelay={int(round(start*1000))}:all=1,apad=whole_dur={total}[{label}]"
+            filters.append(chain)
             labels.append(f"[{label}]")
         if len(labels) == 1:
             filters.append(f"{labels[0]}anull[aout]")
@@ -117,7 +158,7 @@ def main():
         if labels:
             cmd += ["-map", "[aout]"]
         if captions:
-            cmd += ["-map", f"{1 + len(audio)}:0", "-c:s", "mov_text"]
+            cmd += ["-map", f"{1 + len(audio) + len(normalized_cues)}:0", "-c:s", "mov_text"]
         cmd += ["-t", str(total), "-c:v", "copy"]
         if labels:
             cmd += ["-c:a", "aac", "-b:a", "192k"]
@@ -127,7 +168,8 @@ def main():
         fail("Render output is missing or empty")
     print(json.dumps({"status":"succeeded","output":str(output),"bytes":output.stat().st_size,
                       "duration_seconds":round(total,3),"scenes":len(scenes),
-                      "audio_tracks":len(audio),"soft_subtitles":bool(captions)}, indent=2))
+                      "audio_tracks":len(audio) + len(normalized_cues),"audio_cues":len(normalized_cues),
+                      "soft_subtitles":bool(captions)}, indent=2))
 
 if __name__ == "__main__":
     main()
