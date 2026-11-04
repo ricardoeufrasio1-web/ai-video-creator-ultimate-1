@@ -111,8 +111,9 @@ class RendererValidationTests(unittest.TestCase):
     def test_invalid_audio_normalization_range_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             folder = Path(temp)
+            (folder / "frame.ppm").write_bytes(b"P6\\n1 1\\n255\\n\\x00\\x00\\x00")
             result, output = self.run_project(folder, {
-                "scenes": [{"type": "image", "src": "frame.png", "duration": 1}],
+                "scenes": [{"type": "image", "src": "frame.ppm", "duration": 1}],
                 "audio_normalization": {"integrated_lufs": -80},
             })
             self.assertEqual(result.returncode, 2)
