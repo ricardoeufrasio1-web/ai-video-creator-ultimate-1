@@ -8,5 +8,8 @@
   ],
   "voiceover": "voice.wav",
   "voiceover_offset": 0.1,
-  "captions": "captions.srt"
+  "captions": "captions.srt",
+  "audio_cues": [
+    { "id": "cue-smoke", "src": "voice.wav", "role": "sfx", "start": 0.5, "duration": 0.75, "gain": 0.5, "fade_in": 0.1, "fade_out": 0.1 }
+  ]
 }
