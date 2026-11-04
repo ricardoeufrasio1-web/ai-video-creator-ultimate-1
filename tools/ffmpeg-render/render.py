@@ -130,6 +130,20 @@ def main():
             fail(f"Audio cue {index} role is unsupported")
         normalized_cues.append((cue_id, resolve_asset(root, str(cue.get("src", ""))), role,
                                 start, duration, gain, fade_in, fade_out))
+    normalization = project.get("audio_normalization", False)
+    normalization_filter = None
+    if normalization:
+        if not isinstance(normalization, dict):
+            fail("audio_normalization must be false or an object")
+        try:
+            integrated = float(normalization.get("integrated_lufs", -16))
+            true_peak = float(normalization.get("true_peak_db", -1.5))
+            loudness_range = float(normalization.get("loudness_range", 11))
+        except (TypeError, ValueError):
+            fail("audio_normalization targets must be numeric")
+        if not (-36 <= integrated <= -5 and -9 <= true_peak <= 0 and 1 <= loudness_range <= 20):
+            fail("audio_normalization targets are out of supported ranges")
+        normalization_filter = f"loudnorm=I={integrated}:TP={true_peak}:LRA={loudness_range}"
     captions = resolve_asset(root, project["captions"]) if project.get("captions") else None
     if captions and captions.suffix.lower() != ".srt":
         fail("captions must reference an .srt SubRip file")
@@ -212,11 +226,13 @@ def main():
             filters.append(f"{labels[0]}anull[aout]")
         elif len(labels) > 1:
             filters.append(f"{''.join(labels)}amix=inputs={len(labels)}:duration=longest:dropout_transition=2[aout]")
+        if labels and normalization_filter:
+            filters.append(f"[aout]{normalization_filter}[anorm]")
         if filters:
             cmd += ["-filter_complex", ";".join(filters)]
         cmd += ["-map", "0:v:0"]
         if labels:
-            cmd += ["-map", "[aout]"]
+            cmd += ["-map", "[anorm]" if normalization_filter else "[aout]"]
         if captions:
             cmd += ["-map", f"{1 + len(audio) + len(normalized_cues)}:0", "-c:s", "mov_text"]
         cmd += ["-t", str(total), "-c:v", "copy"]
@@ -231,7 +247,7 @@ def main():
                       "audio_tracks":len(audio) + len(normalized_cues),"audio_cues":len(normalized_cues),
                       "transition":transition.get("type") if transition else "hard_cut",
                       "transition_effect":transition_effect if transition else None,
-                      "soft_subtitles":bool(captions)}, indent=2))
+                      "soft_subtitles":bool(captions),"audio_normalization":bool(normalization_filter)}, indent=2))
 
 if __name__ == "__main__":
     main()
