@@ -40,7 +40,7 @@ This engine can create highly polished motion design, explainers, graphic-led st
 
 ## Timed captions and on-screen text
 
-Use explicit caption text, scene-local start time and duration. In the procedural MP4 renderer, use an element with `type: caption`, `text`, optional `x`, `y`, `size`, `fill`, plus `delay` and `duration`. Caption timing must fit inside its scene. Prefer concise, readable phrases, high contrast and safe-area placement; do not imply word-level karaoke timing unless each word is separately timed. Keep selectable subtitle tracks as a separate accessibility option when supported by the renderer.
+Use explicit caption text, scene-local start time and duration. The procedural MP4 renderer also supports simple geometric glyph elements with `type` set to `circle`, `triangle`, `diamond` or `star`; set `x`, `y`, `size`, `fill`, and optional `delay`/`opacity`. These are font glyphs, not editable SVG paths.\n\nIn the procedural MP4 renderer, use an element with `type: caption`, `text`, optional `x`, `y`, `size`, `fill`, plus `delay` and `duration`. Caption timing must fit inside its scene. Prefer concise, readable phrases, high contrast and safe-area placement; do not imply word-level karaoke timing unless each word is separately timed. Keep selectable subtitle tracks as a separate accessibility option when supported by the renderer.
 
 ## Voice and sound
 Use a host-provided speech tool if available, a user recording, or a bundled/local TTS engine only if its executable/model is actually present and licensed. If no voice engine exists, provide a narration script and allow silent or music-only output. Never claim synthesized narration was produced without an actual audio file.
