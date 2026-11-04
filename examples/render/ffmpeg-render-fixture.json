@@ -21,6 +21,7 @@
       "motion": "zoom_out"
     }
   ],
+  "audio_normalization": true,
   "voiceover": "voice.wav",
   "voiceover_offset": 0.1,
   "captions": "captions.srt",
