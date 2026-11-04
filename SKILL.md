@@ -63,6 +63,7 @@ Use HyperFrames as the preferred composition/rendering workflow when the environ
 ## Project generation and validation
 
 - Provider-free procedural scene generator: `tools/procedural-scene-engine/generate.mjs` (Node.js 22+), creates self-contained SVG/HTML compositions from JSON without remote assets.
+- One-command local pipeline: `tools/procedural-scene-engine/run_pipeline.py` optionally synthesizes offline narration, renders with FFmpeg, verifies the MP4 using FFprobe, and can write a QA metadata report. See its README for prerequisites and limitations.
 - Procedural MP4 renderer: `tools/procedural-scene-engine/render.py` uses local FFmpeg for text, timed captions, rectangles, lines, progress bars, camera moves, transitions and local audio mixing; see its README for limitations.
 - Optional offline narration: `tools/procedural-scene-engine/tts.py` uses a locally installed eSpeak NG executable; it does not use a remote AI service and its voice quality is synthetic/robotic.
 - Text-only starter composition: `tools/project-generator/generate.mjs` (Node.js 22+). It creates HTML and copies project JSON; it does not generate media or render MP4.
