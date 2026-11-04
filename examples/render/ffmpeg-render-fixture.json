@@ -4,7 +4,7 @@
   "height": 180,
   "fps": 24,
   "scenes": [
-    { "id": "opening", "type": "image", "src": "fixture.ppm", "duration": 2 }
+    { "id": "opening", "type": "image", "src": "fixture.ppm", "duration": 2, "fade_in": 0.2, "fade_out": 0.2 }
   ],
   "voiceover": "voice.wav",
   "voiceover_offset": 0.1,
