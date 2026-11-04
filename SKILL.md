@@ -7,18 +7,18 @@ description: Universal AI video production workflow for research, scripting, sto
 
 A modular, tool-aware workflow for producing complete videos from an idea, brief, article, script, product, or source assets across educational, documentary, marketing, recipe, entertainment, news, storytelling, tutorial, and other niches.
 
-## Core principles
+## Principles
 
 - Identify audience, purpose, platform, format, duration, language, tone, and desired outcome.
 - Preserve user-provided facts, wording, scripts, brand constraints, and source material unless asked to revise them.
-- Research factual/current topics and distinguish verified facts, uncertainty, opinion, and creative reconstruction.
+- Research factual/current topics; distinguish verified facts, uncertainty, opinion, and creative reconstruction.
 - Design for clarity, pacing, accessibility, and audience value; never promise virality or guaranteed performance.
 - Maintain continuity across subjects, wardrobe, props, locations, lighting, screen direction, and timeline.
 - Respect copyright, licenses, privacy, consent, platform rules, and disclosure requirements.
 - Be transparent about assets, tools, checks performed, and whether a video was actually rendered.
 - Prefer free/open-source tools when practical; never describe a service as unlimited/free unless current terms support it.
 
-## Workflow
+## End-to-end workflow
 
 1. **Intake:** clarify essential brief details; safely default the rest.
 2. **Research:** verify factual claims and retain source notes.
@@ -30,6 +30,8 @@ A modular, tool-aware workflow for producing complete videos from an idea, brief
 8. **Production/edit:** assemble media, motion, typography, captions, transitions, and mix with available tools.
 9. **Quality assurance:** inspect facts, timing, continuity, spelling, audio, artifacts, safe areas, aspect ratio, and export settings.
 10. **Delivery:** provide MP4 only if an actual render succeeded; otherwise provide editable source and exact render instructions. Include a publishing pack when useful.
+
+Use [docs/production-checklist.md](docs/production-checklist.md) as the handoff gate.
 
 ## Editing and rendering priority
 
@@ -45,7 +47,7 @@ Use **HyperFrames** as the primary composition and deterministic rendering workf
 
 ## Runtime and render status
 
-Check Node.js, FFmpeg, browser/runtime, and renderer dependencies before promising an export. If no compatible runtime is available (including phone-only workflows), prepare a portable project and setup instructions rather than claiming a render. Distinguish **generated**, **structurally checked**, **visually reviewed**, **audio reviewed**, and **approved**. Metadata-only checks are not visual or audio QA.
+Check Node.js, FFmpeg, browser/runtime, and renderer dependencies before promising an export. If no compatible runtime is available (including phone-only workflows), prepare a portable project and setup instructions rather than claiming a render. Distinguish **generated**, **structurally checked**, **visually reviewed**, **audio reviewed**, and **approved**. Metadata-only checks are not visual/audio QA.
 
 ## Specialist modules
 
@@ -66,13 +68,13 @@ Load only what the task needs:
 - QA and render validation: `modules/quality-assurance.md`, `modules/render-validation.md`
 - Publishing and handoff: `modules/publishing.md`
 
-## Output options
+## Universal formats and deliverables
 
-Depending on the request and available tools, deliver a brief, research notes, script, timed storyboard, generation prompts, asset manifest, continuity guide, editable project, verified rendered MP4, captions, thumbnail concept, title, description, social copy, tags, and credits.
+Adapt to vertical 9:16, square 1:1, landscape 16:9, or other requested formats; short- or long-form duration; voiceover, presenter, dialogue, ASMR, or text-led formats. Depending on the task and available tools, deliver a brief, research notes, script, timed storyboard, generation prompts, asset manifest, continuity guide, editable project, verified MP4, captions, thumbnail concept, title, description, social copy, tags, and credits.
 
-## Universal formats
+## Automation and troubleshooting
 
-Adapt to vertical 9:16, square 1:1, landscape 16:9, or other requested formats; short- or long-form duration; voiceover, presenter, dialogue, ASMR, or text-led formats. Do not impose a platform-specific workflow unless requested.
+GitHub Actions validates JSON syntax, JavaScript syntax, the sample timeline, starter project generation, and sample render metadata. See [docs/testing.md](docs/testing.md). For common setup and production issues, see [docs/troubleshooting.md](docs/troubleshooting.md).
 
 ## Licensing and references
 
