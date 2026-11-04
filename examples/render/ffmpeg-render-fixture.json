@@ -38,6 +38,7 @@
   ],
   "transition": {
     "type": "crossfade",
+    "effect": "dissolve",
     "duration": 0.5
   }
 }
