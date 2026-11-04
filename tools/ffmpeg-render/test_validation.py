@@ -94,6 +94,20 @@ class RendererValidationTests(unittest.TestCase):
             self.assertIn("invalid fade values", result.stderr)
             self.assertFalse(output.exists())
 
+    def test_invalid_transition_effect_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            folder = Path(temp)
+            result, output = self.run_project(folder, {
+                "transition": {"type": "crossfade", "effect": "teleport", "duration": 0.5},
+                "scenes": [
+                    {"type": "image", "src": "first.png", "duration": 1},
+                    {"type": "image", "src": "second.png", "duration": 1},
+                ],
+            })
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("transition.effect must be one of", result.stderr)
+            self.assertFalse(output.exists())
+
     def test_invalid_scene_type_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             folder = Path(temp)
