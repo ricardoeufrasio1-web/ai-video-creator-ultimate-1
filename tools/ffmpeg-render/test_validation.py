@@ -58,8 +58,9 @@ class RendererValidationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             folder = Path(temp)
             (folder / "tone.wav").write_bytes(b"fake audio")
+            (folder / "frame.ppm").write_bytes(b"P6\\n1 1\\n255\\n\\x00\\x00\\x00")
             result, output = self.run_project(folder, {
-                "scenes": [{"type": "image", "src": "missing-image.png", "duration": 2}],
+                "scenes": [{"type": "image", "src": "frame.ppm", "duration": 2}],
                 "audio_cues": [
                     {"id": "same", "src": "tone.wav", "start": 0, "duration": 1},
                     {"id": "same", "src": "tone.wav", "start": 1, "duration": 1},
@@ -74,7 +75,7 @@ class RendererValidationTests(unittest.TestCase):
             folder = Path(temp)
             (folder / "tone.wav").write_bytes(b"fake audio")
             result, output = self.run_project(folder, {
-                "scenes": [{"type": "image", "src": "missing-image.png", "duration": 2}],
+                "scenes": [{"type": "image", "src": "frame.ppm", "duration": 2}],
                 "audio_cues": [{"id": "cue", "src": "tone.wav", "start": 1.5, "duration": 1}],
             })
             self.assertEqual(result.returncode, 2)
