@@ -39,6 +39,9 @@ Typical environment requirements may include Node.js 22+, FFmpeg, and a compatib
 - `docs/architecture.md` — modular system architecture.
 - `docs/workflow.md` — end-to-end production workflow.
 - `docs/hyperframes-workflow.md` — HyperFrames-first editing and rendering.
+- `docs/render-pipeline.md` — production pipeline from brief to validated export.
+- `examples/hyperframes-basic/` — original minimal HTML composition and run instructions.
+- `templates/asset-manifest.csv` — reusable asset tracking sheet.
 - `docs/providers.md` — provider-neutral asset strategy.
 - `docs/licensing.md` — licensing and rights checklist.
 - `templates/` — reusable creative brief and storyboard templates.
