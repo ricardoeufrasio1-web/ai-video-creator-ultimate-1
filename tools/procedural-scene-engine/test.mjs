@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
@@ -25,5 +25,10 @@ try {
   assert.match(html,/stop-color="#68d5ff"/);
   assert.match(html,/star/);
   assert.doesNotMatch(html,/<script[^>]+src=/i);
+  const invalid=path.join(temp,"invalid-gradient.json");
+  const bad=structuredClone(project);
+  bad.theme.gradient={from:"not a color!",to:"#ffffff",angle:20};
+  await writeFile(invalid,JSON.stringify(bad),"utf8");
+  assert.throws(()=>execFileSync(process.execPath,[path.join(root,"tools/procedural-scene-engine/generate.mjs"),invalid,path.join(temp,"invalid-output")],{stdio:"pipe"}),/status|failed/i);
   console.log("Procedural scene engine smoke test passed.");
 } finally { await rm(temp,{recursive:true,force:true}); }
