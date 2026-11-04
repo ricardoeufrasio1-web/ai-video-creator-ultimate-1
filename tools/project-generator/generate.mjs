@@ -116,6 +116,7 @@ async function main() {
   const errors = validate(project);
   if (errors.length) throw new Error(errors.join("\n"));
   if (output === path.dirname(output) || output === input || output.startsWith(input + path.sep)) throw new Error("Choose a separate output directory.");
+  await mkdir(path.dirname(output), { recursive: true });
   await mkdir(output, { recursive: false });
   await writeFile(path.join(output, "index.html"), buildHtml(project), "utf8");
   await copyFile(input, path.join(output, "project.json"));
