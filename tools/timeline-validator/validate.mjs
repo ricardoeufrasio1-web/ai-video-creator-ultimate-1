@@ -59,7 +59,14 @@ async function main() {
     if (!validNumber(cue.start) || cue.start < 0) add(errors, `audioCues[${i}].start must be >= 0.`);
     if (!validNumber(cue.duration) || cue.duration <= 0) add(errors, `audioCues[${i}].duration must be > 0.`);
     if (cue.assetId && !assetIds.has(cue.assetId)) add(errors, `Audio cue ${cue.id}: unknown assetId '${cue.assetId}'.`);
-    if (validNumber(cue.start) && validNumber(cue.duration) && cue.start + cue.duration > maxEnd + 0.001) add(warnings, `Audio cue ${cue.id}: extends beyond visual composition end (${maxEnd.toFixed(3)}s).`);
+    if (cue.assetId) {
+      const asset = (Array.isArray(data.assets) ? data.assets : []).find((item) => item?.id === cue.assetId);
+      if (asset && asset.type && asset.type !== "audio") add(errors, `Audio cue ${cue.id}: asset '${cue.assetId}' must have type audio.`);
+    }
+    if (validNumber(cue.start) && validNumber(cue.duration) && cue.start + cue.duration > maxEnd + 0.001) add(errors, `Audio cue ${cue.id}: extends beyond visual composition end (${maxEnd.toFixed(3)}s).`);
+    if (validNumber(fps) && validNumber(cue.start) && Math.abs(cue.start * fps - Math.round(cue.start * fps)) > 0.001) add(warnings, `Audio cue ${cue.id}: start is not aligned to an integer frame at ${fps} fps.`);
+    if (validNumber(fps) && validNumber(cue.duration) && Math.abs(cue.duration * fps - Math.round(cue.duration * fps)) > 0.001) add(warnings, `Audio cue ${cue.id}: duration is not aligned to an integer frame at ${fps} fps.`);
+    if (cue.gain !== undefined && (!validNumber(cue.gain) || cue.gain < 0 || cue.gain > 4)) add(errors, `Audio cue ${cue.id}: gain must be between 0 and 4.`);
     if (cue.role && !["narration", "dialogue", "music", "sfx", "ambience"].includes(cue.role)) add(warnings, `Audio cue ${cue.id}: unrecognized role '${cue.role}'.`);
   }
 
