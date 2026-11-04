@@ -33,13 +33,13 @@ function validate(p) {
   }
   return e;
 }
-function renderElement(x, w, h, index) {
-  const xx=x.x??w/2, yy=x.y??h/2, fill=color(x.fill,"#68d5ff"), opacity=clamp(x.opacity??1,0,1);
+function renderElement(x, w, h, index, theme) {
+  const xx=x.x??w/2, yy=x.y??h/2, fill=color(x.fill,theme.accent), opacity=clamp(x.opacity??1,0,1);
   const common='fill="'+fill+'" opacity="'+opacity+'"';
   if (x.type==="text") {
     const size=clamp(x.size??Math.round(w*.06),8,Math.round(w*.3));
     const anchor=x.align==="left"?"start":x.align==="right"?"end":"middle";
-    return '<text x="'+xx+'" y="'+yy+'" text-anchor="'+anchor+'" dominant-baseline="middle" font-size="'+size+'" font-weight="'+clamp(x.weight??750,100,900)+'" fill="'+color(x.fill,"#ffffff")+'" class="element enter e'+index+'">'+esc(x.text??"")+'</text>';
+    return '<text x="'+xx+'" y="'+yy+'" text-anchor="'+anchor+'" dominant-baseline="middle" font-size="'+size+'" font-weight="'+clamp(x.weight??750,100,900)+'" fill="'+color(x.fill,theme.text)+'" class="element enter e'+index+'">'+esc(x.text??"")+'</text>';
   }
   if (x.type==="rect") return '<rect x="'+xx+'" y="'+yy+'" width="'+clamp(x.width??240,1,w*2)+'" height="'+clamp(x.height??120,1,h*2)+'" rx="'+clamp(x.radius??12,0,200)+'" '+common+' class="element enter e'+index+'"/>';
   if (x.type==="circle") return '<circle cx="'+xx+'" cy="'+yy+'" r="'+clamp(x.radius??80,1,Math.max(w,h))+'" '+common+' class="element enter e'+index+'"/>';
@@ -48,11 +48,11 @@ function renderElement(x, w, h, index) {
   return '<g class="element enter e'+index+'"><rect x="'+xx+'" y="'+yy+'" width="'+bw+'" height="'+bh+'" rx="'+(bh/2)+'" fill="'+color(x.track,"#334155")+'"/><rect x="'+xx+'" y="'+yy+'" width="'+(bw*value)+'" height="'+bh+'" rx="'+(bh/2)+'" fill="'+fill+'"/></g>';
 }
 function build(p) {
-  const w=p.width??1080,h=p.height??1920,fps=p.fps??30,bg=color(p.background,"#101827"),accent=color(p.accent,"#68d5ff");
+  const w=p.width??1080,h=p.height??1920,fps=p.fps??30;\n  const theme={background:color(p.theme?.background??p.background,"#101827"),accent:color(p.theme?.accent??p.accent,"#68d5ff"),text:color(p.theme?.text,"#ffffff"),muted:color(p.theme?.muted,"#c6d0dc")};\n  const bg=theme.background,accent=theme.accent;
   let cursor=0;
   const scenes=p.scenes.map((s,i)=>{
     const dur=s.duration,start=cursor; cursor+=dur;
-    const body=s.elements.map((el,j)=>renderElement(el,w,h,j)).join("\n");
+    const body=s.elements.map((el,j)=>renderElement(el,w,h,j,theme)).join("\n");
     const enter=s.animation==="pop"?"pop":s.animation==="slide"?"slide":s.animation==="none"?"still":"rise";
     const camera=s.camera??"static";
     const transition=s.transition??"fade";
