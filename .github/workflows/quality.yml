@@ -39,13 +39,6 @@ jobs:
           python3 tools/package-skill/package.py
           test -s dist/ai-video-creator-ultimate.zip
           python3 -c "import zipfile; z=zipfile.ZipFile('dist/ai-video-creator-ultimate.zip'); assert 'ai-video-creator-ultimate/SKILL.md' in z.namelist(); assert 'ai-video-creator-ultimate/modules/scriptwriting.md' in z.namelist(); assert 'ai-video-creator-ultimate/modules/procedural-visual-engine.md' in z.namelist(); assert 'ai-video-creator-ultimate/tools/procedural-scene-engine/render.py' in z.namelist(); assert 'ai-video-creator-ultimate/docs/style-catalog.md' in z.namelist(); assert 'ai-video-creator-ultimate/tools/procedural-scene-engine/run_pipeline.py' in z.namelist(); assert 'ai-video-creator-ultimate/tools/procedural-scene-engine/tts.py' in z.namelist(); assert 'ai-video-creator-ultimate/examples/procedural-scenes/one-command-video.json' in z.namelist()"
-      - name: Upload portable Agent Skill ZIP
-        uses: actions/upload-artifact@v4
-        with:
-          name: ai-video-creator-ultimate-skill
-          path: dist/ai-video-creator-ultimate.zip
-          if-no-files-found: error
-          retention-days: 30
       - name: Test provider-free procedural scene engine
         run: |
           node --check tools/procedural-scene-engine/generate.mjs
@@ -79,3 +72,10 @@ jobs:
           node tools/render-preflight/check-render.mjs "$RUNNER_TEMP/ffprobe-output.json" --expect-width 320 --expect-height 180 --expect-fps 24 --expect-duration 2.5 --require-audio
       - name: Check sample render metadata
         run: node tools/render-preflight/check-render.mjs examples/render/ffprobe-output.example.json --expect-width 1080 --expect-height 1920 --expect-fps 30 --expect-duration 30 --require-audio
+      - name: Upload portable Agent Skill ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-video-creator-ultimate-skill
+          path: dist/ai-video-creator-ultimate.zip
+          if-no-files-found: error
+          retention-days: 30
