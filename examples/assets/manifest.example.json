@@ -1,0 +1,23 @@
+{
+  "project": "sample-video",
+  "assets": [
+    {
+      "id": "opening-still",
+      "type": "image",
+      "path": "media/opening-still.jpg",
+      "source": "Original image supplied by the project owner",
+      "license": "Confirm ownership and usage rights before publication",
+      "commercialUse": false
+    },
+    {
+      "id": "narration-main",
+      "type": "audio",
+      "path": "media/narration.wav",
+      "source": "Project narration recording",
+      "license": "Confirm performer and recording rights",
+      "commercialUse": false,
+      "subjectType": "voice",
+      "consentConfirmed": false
+    }
+  ]
+}
