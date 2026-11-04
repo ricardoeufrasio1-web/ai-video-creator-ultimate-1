@@ -9,8 +9,7 @@ A universal, modular skill for planning and producing videos across niches, plat
 - Creates timed scripts, storyboards, shot lists, scene prompts, continuity notes, and asset manifests.
 - Uses **HyperFrames as the preferred editing/rendering workflow** when the environment supports it.
 - Includes a Node.js starter generator for text-based HyperFrames compositions.
-- Includes an asset preflight checker for local media paths and rights metadata.
-- Includes a timeline validator for scene timing, asset references, and audio cue ranges.
+- Includes asset, timeline, and rendered-output metadata preflight checkers.
 - Uses FFmpeg for media operations when available; treats Remotion and other systems as optional adapters.
 - Produces a publishing pack: titles, descriptions, captions, thumbnails concepts, credits, and source notes.
 
@@ -18,61 +17,47 @@ A universal, modular skill for planning and producing videos across niches, plat
 
 1. Read [SKILL.md](SKILL.md).
 2. Define the audience, goal, platform, format, duration, language, tone, and any required CTA.
-3. Follow the production workflow in [docs/workflow.md](docs/workflow.md).
+3. Follow [docs/workflow.md](docs/workflow.md).
 4. Use the brief and storyboard templates in [templates/](templates/).
-5. To generate a starter composition, use [tools/project-generator](tools/project-generator/README.md) with [the example project JSON](examples/hyperframes-basic/project.json).
-6. If rendering with HyperFrames, follow [docs/hyperframes-workflow.md](docs/hyperframes-workflow.md) and check upstream documentation for current installation details.
+5. Generate a starter composition with [tools/project-generator](tools/project-generator/README.md) and [the example project JSON](examples/hyperframes-basic/project.json).
+6. Validate local assets with [asset preflight](tools/asset-preflight/README.md) and scene timing with [timeline validation](tools/timeline-validator/README.md).
+7. After a real render, export metadata with FFprobe and run [render preflight](tools/render-preflight/README.md).
+8. For HyperFrames, follow [docs/hyperframes-workflow.md](docs/hyperframes-workflow.md) and verify current upstream CLI instructions.
 
 ## Preferred editing engine: HyperFrames
 
-HyperFrames is the primary composition/rendering reference for this project. It supports HTML/CSS/JavaScript-based video compositions and a deterministic frame-oriented rendering pipeline. It is **not bundled** in this repository. Install it separately according to its official documentation and review its current license, dependencies, and runtime requirements.
+HyperFrames is the primary composition/rendering reference. It supports HTML/CSS/JavaScript-based video compositions and a frame-oriented rendering pipeline. It is **not bundled** here. Install it separately and review its current license, dependencies, and runtime requirements.
 
-Typical environment requirements may include Node.js 22+, FFmpeg, and a compatible browser/runtime. Exact requirements can change by version and operating system. Do not assume that a phone-only environment can run the full renderer.
+Typical requirements may include Node.js 22+, FFmpeg, and a compatible browser/runtime. Exact requirements can change by version and operating system. Do not assume a phone-only environment can run the full renderer.
 
-## Project generator
+## Tools and limitations
 
-The starter generator uses Node.js built-ins and accepts a small text-only JSON schema. It creates an `index.html` composition and preserves the source JSON. It does not generate images, video, voice, or music, and it does not render MP4. See [project schema](docs/project-schema.md) and [generator guide](tools/project-generator/README.md). Use [asset preflight](tools/asset-preflight/README.md) to check media paths and rights metadata before editing. Use [timeline validation](tools/timeline-validator/README.md) to check scene timing and audio cue structure.
+- **Project generator:** creates a text-based HTML starter composition and preserves source JSON. It does not generate images, video, voice, music, or MP4.
+- **Asset preflight:** checks manifest structure, local paths, and missing rights metadata. It cannot prove ownership or licensing.
+- **Timeline validator:** checks scene timing, frame alignment, asset IDs, and audio cue ranges. It does not render or prove synchronization.
+- **Render preflight:** checks FFprobe metadata such as streams, dimensions, FPS, and duration. It does not decode and inspect every frame or listen to audio.
 
 ## Requirements and limitations
 
 - This repository contains a skill and production tooling, not a hosted video-generation service.
 - Image, video, voice, music, and model providers may charge fees, impose quotas, or restrict commercial use.
 - Free/open-source tools are preferred where practical, but unlimited free generation is never guaranteed.
-- A rendered MP4 must only be claimed when an actual render has completed and passed basic checks.
+- Claim a rendered MP4 only after an actual render has completed and the file has been verified.
 - When rendering is unavailable, deliver an editable project, assets, and clear setup/render instructions.
 
 ## Repository map
 
 - `SKILL.md` — main skill instructions.
-- `docs/architecture.md` — modular system architecture.
-- `docs/workflow.md` — end-to-end production workflow.
-- `docs/hyperframes-workflow.md` — HyperFrames-first editing and rendering.
-- `docs/render-pipeline.md` — production pipeline from brief to validated export.
-- `docs/project-schema.md` — starter JSON project format.
+- `docs/` — architecture, workflow, providers, schema, licensing, and render pipeline.
+- `modules/` — research, scripting, creative direction, asset production, editing, audio, motion, voice, QA, and publishing specialists.
 - `tools/project-generator/` — Node.js project generator.
 - `tools/asset-preflight/` — local media manifest checker.
 - `tools/timeline-validator/` — scene and audio cue timeline validator.
-- `examples/assets/` — example asset manifest.
-- `examples/hyperframes-basic/` — HTML composition and JSON example.
-- `templates/asset-manifest.csv` — reusable asset tracking sheet.
-- `docs/providers.md` — provider-neutral asset strategy.
-- `docs/licensing.md` — licensing and rights checklist.
-- `templates/` — reusable creative brief and storyboard templates.
-- `modules/research.md` — research and fact-checking.
-- `modules/scriptwriting.md` — scripts, hooks, pacing, and CTA.
-- `modules/creative-direction.md` — storyboard, camera, lighting, and continuity.
-- `modules/asset-production.md` — asset planning and production.
-- `modules/timeline-orchestration.md` — frame-accurate timeline planning.
-- `modules/media-management.md` — asset organization, provenance, and rights preflight.
-- `modules/audio-synchronization.md` — narration, music, effects, and cue synchronization.
-- `modules/automation.md` — repeatable generation and validation.
-- `modules/editing-hyperframes.md` — HyperFrames-first editing.
-- `modules/audio.md` — narration, music, and sound design.
-- `modules/captions-accessibility.md` — caption timing and accessibility.
-- `modules/quality-assurance.md` — pre-delivery inspection.
-- `modules/publishing.md` — publishing metadata and delivery.
+- `tools/render-preflight/` — FFprobe metadata checker for actual rendered output.
+- `examples/` — starter composition, asset manifest, timeline, and FFprobe metadata examples.
+- `templates/` — reusable creative brief, storyboard, and asset tracking templates.
 - `THIRD_PARTY_NOTICES.md` — reference projects and attribution/licensing review notes.
 
 ## License
 
-The repository's original documentation and skill files are licensed under MIT; see [LICENSE](LICENSE). This license applies only to original files in this repository. It does not change the licenses or terms of HyperFrames, FFmpeg, Remotion, other third-party software, models, APIs, fonts, music, footage, or generated assets.
+Original documentation and skill files are licensed under MIT; see [LICENSE](LICENSE). This does not change licenses or terms for HyperFrames, FFmpeg, Remotion, third-party software, models, APIs, fonts, music, footage, or generated assets.
