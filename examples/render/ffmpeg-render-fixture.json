@@ -1,0 +1,10 @@
+{
+  "title": "CI renderer smoke test",
+  "width": 320,
+  "height": 180,
+  "fps": 24,
+  "scenes": [
+    { "id": "opening", "type": "image", "src": "fixture.ppm", "duration": 2 }
+  ],
+  "voiceover": "voice.wav"
+}
