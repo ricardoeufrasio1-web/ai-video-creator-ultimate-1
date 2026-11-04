@@ -133,6 +133,8 @@ def main():
     normalization = project.get("audio_normalization", False)
     normalization_filter = None
     if normalization:
+        if normalization is True:
+            normalization = {}
         if not isinstance(normalization, dict):
             fail("audio_normalization must be false or an object")
         try:
