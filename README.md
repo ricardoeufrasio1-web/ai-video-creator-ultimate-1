@@ -96,3 +96,8 @@ This creates `dist/ai-video-creator-ultimate.zip` and the matching folder. The a
 A chat that does not support Agent Skills can still use the instructions by attaching the files, but that is not a persistent installation. See [the compatibility guide](docs/agent-compatibility.md).
 
 **Important:** the portable package carries the workflow and utilities already in this repository; it does not magically add image/video/voice providers, a hosted rendering server, paid credits, or social account permissions. Current gaps are listed in the compatibility guide.
+
+
+## First real MP4 renderer
+
+An experimental local FFmpeg renderer is available at `tools/ffmpeg-render/`. It assembles ordered local image/video scenes and optional voiceover/music into MP4. Run `python3 tools/ffmpeg-render/create_fixture.py` and then follow `tools/ffmpeg-render/README.md`. GitHub Actions now renders a deterministic two-second MP4 fixture and validates its video/audio streams with FFprobe. This proves the local renderer path, not AI asset generation or social publishing.
