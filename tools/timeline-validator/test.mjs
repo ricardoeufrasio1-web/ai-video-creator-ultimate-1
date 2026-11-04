@@ -16,15 +16,8 @@ const base = {
 };
 function run(data) {
   const file = path.join(temp, "case.json");
-  writeFileSyncCompat(file, JSON.stringify(data));
+  writeFileSync(file, JSON.stringify(data));
   return spawnSync(process.execPath, [validator, file], { encoding: "utf8" });
-}
-function writeFileSyncCompat(file, value) {
-  return requireWrite(file, value);
-}
-import { writeFile as writeFileAsync } from "node:fs/promises";
-function requireWrite(file, value) {
-  return writeFileAsync(file, value);
 }
 try {
   let result = await run(base);
