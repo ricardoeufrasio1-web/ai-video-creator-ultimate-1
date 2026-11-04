@@ -41,6 +41,20 @@
           "height": 12,
           "radius": 6,
           "fill": "#fbbf24"
+        },
+        {
+          "type": "star",
+          "x": 180,
+          "y": 1150,
+          "size": 100,
+          "fill": "#fbbf24"
+        },
+        {
+          "type": "triangle",
+          "x": 870,
+          "y": 1150,
+          "size": 130,
+          "fill": "#a3e635"
         }
       ]
     },
