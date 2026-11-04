@@ -9,14 +9,16 @@
       "type": "image",
       "src": "fixture.ppm",
       "duration": 1.5,
-      "fade_in": 0.2
+      "fade_in": 0.2,
+      "motion": "zoom_in"
     },
     {
       "id": "closing",
       "type": "image",
       "src": "fixture2.ppm",
       "duration": 1.5,
-      "fade_out": 0.2
+      "fade_out": 0.2,
+      "motion": "zoom_out"
     }
   ],
   "voiceover": "voice.wav",
