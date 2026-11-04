@@ -138,6 +138,10 @@ def main():
             else:
                 cmd += ["-stream_loop", "-1", "-i", str(source)]
             vf = f"scale={width}:{height}:force_original_aspect_ratio=decrease,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2,setsar=1,fps={fps},format=yuv420p"
+            if motion == "zoom_in":
+                vf += f",zoompan=z='min(zoom+0.0015,1.12)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={width}x{height}:fps={fps}"
+            elif motion == "zoom_out":
+                vf += f",zoompan=z='if(eq(on,1),1.12,max(zoom-0.0015,1.0))':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={width}x{height}:fps={fps}"
             if fade_in:
                 vf += f",fade=t=in:st=0:d={fade_in}:color=black"
             if fade_out:
