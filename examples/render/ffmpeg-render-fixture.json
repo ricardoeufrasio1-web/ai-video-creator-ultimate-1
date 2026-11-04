@@ -4,12 +4,38 @@
   "height": 180,
   "fps": 24,
   "scenes": [
-    { "id": "opening", "type": "image", "src": "fixture.ppm", "duration": 2, "fade_in": 0.2, "fade_out": 0.2 }
+    {
+      "id": "opening",
+      "type": "image",
+      "src": "fixture.ppm",
+      "duration": 1.5,
+      "fade_in": 0.2
+    },
+    {
+      "id": "closing",
+      "type": "image",
+      "src": "fixture2.ppm",
+      "duration": 1.5,
+      "fade_out": 0.2
+    }
   ],
   "voiceover": "voice.wav",
   "voiceover_offset": 0.1,
   "captions": "captions.srt",
   "audio_cues": [
-    { "id": "cue-smoke", "src": "voice.wav", "role": "sfx", "start": 0.5, "duration": 0.75, "gain": 0.5, "fade_in": 0.1, "fade_out": 0.1 }
-  ]
+    {
+      "id": "cue-smoke",
+      "src": "voice.wav",
+      "role": "sfx",
+      "start": 0.5,
+      "duration": 0.75,
+      "gain": 0.5,
+      "fade_in": 0.1,
+      "fade_out": 0.1
+    }
+  ],
+  "transition": {
+    "type": "crossfade",
+    "duration": 0.5
+  }
 }
