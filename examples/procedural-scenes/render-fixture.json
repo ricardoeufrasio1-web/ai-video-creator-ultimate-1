@@ -36,7 +36,8 @@
           "fill": "#fbbf24",
           "track": "#334155"
         }
-      ]
+      ],
+      "camera": "zoom-in"
     },
     {
       "id": "payoff",
@@ -60,7 +61,8 @@
           "strokeWidth": 6,
           "fill": "#ffffff"
         }
-      ]
+      ],
+      "camera": "pan-left"
     }
   ],
   "transition": {
