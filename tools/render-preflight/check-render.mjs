@@ -30,14 +30,16 @@ try {
   const metadata = JSON.parse(await readFile(input, "utf8"));
   const streams = Array.isArray(metadata.streams) ? metadata.streams : [];
   const video = streams.find((stream) => stream.codec_type === "video");
-  const audio = streams.filter((stream) => stream.codec_type === "audio");\n  const subtitles = streams.filter((stream) => stream.codec_type === "subtitle");
+  const audio = streams.filter((stream) => stream.codec_type === "audio");
+  const subtitles = streams.filter((stream) => stream.codec_type === "subtitle");
   const errors = [];
   const warnings = [];
   const expectedWidth = positiveNumber(argValue("--expect-width"), "--expect-width");
   const expectedHeight = positiveNumber(argValue("--expect-height"), "--expect-height");
   const expectedFps = positiveNumber(argValue("--expect-fps"), "--expect-fps");
   const expectedDuration = positiveNumber(argValue("--expect-duration"), "--expect-duration");
-  const requireAudio = process.argv.includes("--require-audio");\n  const requireSubtitles = process.argv.includes("--require-subtitles");
+  const requireAudio = process.argv.includes("--require-audio");
+  const requireSubtitles = process.argv.includes("--require-subtitles");
 
   if (!video) errors.push("No video stream found.");
   if (video) {
@@ -48,7 +50,8 @@ try {
     if (!Number.isFinite(fps) || fps <= 0) warnings.push("Frame rate is missing or could not be parsed.");
     else if (expectedFps && Math.abs(fps - expectedFps) > 0.02) errors.push(`FPS mismatch: expected ${expectedFps}, got ${fps.toFixed(3)}.`);
   }
-  if (requireAudio && audio.length === 0) errors.push("Audio was required but no audio stream was found.");\n  if (requireSubtitles && subtitles.length === 0) errors.push("Subtitles were required but no subtitle stream was found.");
+  if (requireAudio && audio.length === 0) errors.push("Audio was required but no audio stream was found.");
+  if (requireSubtitles && subtitles.length === 0) errors.push("Subtitles were required but no subtitle stream was found.");
   if (!requireAudio && audio.length === 0) warnings.push("No audio stream found.");
   const duration = Number(metadata.format?.duration ?? video?.duration);
   if (!Number.isFinite(duration) || duration <= 0) warnings.push("Duration is missing or invalid.");
@@ -58,7 +61,8 @@ try {
     status: errors.length ? "FAIL" : warnings.length ? "PASS_WITH_WARNINGS" : "PASS",
     file: input,
     video: video ? { codec: video.codec_name ?? null, width: video.width ?? null, height: video.height ?? null, fps: Number.isFinite(rational(video.avg_frame_rate || video.r_frame_rate)) ? rational(video.avg_frame_rate || video.r_frame_rate) : null } : null,
-    audioStreams: audio.length,\n    subtitleStreams: subtitles.length,
+    audioStreams: audio.length,
+    subtitleStreams: subtitles.length,
     durationSeconds: Number.isFinite(duration) ? duration : null,
     errors,
     warnings,
