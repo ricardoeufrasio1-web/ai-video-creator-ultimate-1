@@ -1,0 +1,30 @@
+{
+  "title": "A short introduction",
+  "compositionId": "intro-demo",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "background": "#101722",
+  "scenes": [
+    {
+      "id": "opening",
+      "duration": 3,
+      "eyebrow": "AI VIDEO CREATOR ULTIMATE",
+      "title": "From idea to video",
+      "subtitle": "A modular workflow for research, storytelling and editing."
+    },
+    {
+      "id": "production",
+      "duration": 3,
+      "eyebrow": "PLAN • CREATE • EDIT",
+      "title": "Build every scene with intention",
+      "subtitle": "Keep timing, continuity and sound aligned."
+    },
+    {
+      "id": "delivery",
+      "duration": 2,
+      "title": "Ready for the next step",
+      "subtitle": "Validate the project before rendering."
+    }
+  ]
+}
