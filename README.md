@@ -43,6 +43,14 @@ Typical environment requirements may include Node.js 22+, FFmpeg, and a compatib
 - `docs/licensing.md` — licensing and rights checklist.
 - `templates/` — reusable creative brief and storyboard templates.
 - `modules/quality-assurance.md` — pre-delivery QA checklist.
+
+- `modules/research.md` — research and fact-checking.
+- `modules/scriptwriting.md` — scripts, hooks, pacing, and CTA.
+- `modules/creative-direction.md` — storyboard, camera, lighting, and continuity.
+- `modules/asset-production.md` — asset planning and production.
+- `modules/editing-hyperframes.md` — HyperFrames-first editing.
+- `modules/audio.md` — narration, music, and sound design.
+- `modules/publishing.md` — publishing metadata and delivery.
 - `THIRD_PARTY_NOTICES.md` — reference projects and attribution/licensing review notes.
 
 ## License
