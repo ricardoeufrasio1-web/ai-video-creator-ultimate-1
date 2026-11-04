@@ -1,0 +1,46 @@
+name: Repository quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate JSON files
+        shell: bash
+        run: |
+          while IFS= read -r file; do
+            echo "Checking $file"
+            node -e "JSON.parse(require('node:fs').readFileSync(process.argv[1], 'utf8'))" "$file"
+          done < <(find . -type f -name '*.json' -not -path './.git/*' | sort)
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          while IFS= read -r file; do
+            echo "Checking $file"
+            node --check "$file"
+          done < <(find tools -type f -name '*.mjs' | sort)
+      - name: Validate sample timeline
+        run: node tools/timeline-validator/validate.mjs examples/timelines/short-form.json
+      - name: Generate starter composition
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/ai-video-creator-test"
+          node tools/project-generator/generate.mjs examples/hyperframes-basic/project.json "$RUNNER_TEMP/ai-video-creator-test/generated"
+          test -s "$RUNNER_TEMP/ai-video-creator-test/generated/index.html"
+          test -s "$RUNNER_TEMP/ai-video-creator-test/generated/project.json"
+      - name: Check sample render metadata
+        run: node tools/render-preflight/check-render.mjs examples/render/ffprobe-output.example.json --expect-width 1080 --expect-height 1920 --expect-fps 30 --expect-duration 30 --require-audio
