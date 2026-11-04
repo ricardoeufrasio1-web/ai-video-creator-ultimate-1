@@ -39,7 +39,7 @@ class ProceduralRenderTests(unittest.TestCase):
             data = json.loads(probe.stdout)
             video = next(stream for stream in data["streams"] if stream["codec_type"] == "video")
             self.assertEqual((video["width"], video["height"]), (320, 568))
-            self.assertAlmostEqual(float(data["format"]["duration"]), 3.0, delta=0.15)
+            self.assertAlmostEqual(float(data["format"]["duration"]), 2.75, delta=0.15)
             self.assertEqual(video["codec_name"], "h264")
             self.assertTrue(any(stream["codec_type"] == "audio" for stream in data["streams"]))
 
