@@ -8,7 +8,7 @@ This dependency-free Node.js tool creates a self-contained HTML/SVG composition 
 node tools/procedural-scene-engine/generate.mjs examples/procedural-scenes/vertical-explainer.json ./output/vertical-explainer
 ```
 
-Open the generated index.html in a modern browser to preview it. The output contains inline SVG, CSS and JavaScript; it makes no network requests.\n\nTo render the supported procedural shapes and text to MP4 using local FFmpeg:\n\n```bash\npython3 tools/procedural-scene-engine/render.py examples/procedural-scenes/render-fixture.json --output ./output/procedural.mp4\n```\n\nThe MP4 renderer supports text, rectangles, lines and progress bars on generated color backgrounds. It requires FFmpeg with libx264 and drawtext support.
+Open the generated index.html in a modern browser to preview it. The output contains inline SVG, CSS and JavaScript; it makes no network requests.\n\nTo render the supported procedural shapes and text to MP4 using local FFmpeg:\n\n```bash\npython3 tools/procedural-scene-engine/render.py examples/procedural-scenes/render-fixture.json --output ./output/procedural.mp4\n```\n\nThe MP4 renderer supports text, rectangles, lines and progress bars on generated color backgrounds. It also accepts optional local audio files as project-level voiceover/music objects, with gain and start offset. It requires FFmpeg with libx264 and drawtext support. No audio is synthesized; audio files must be supplied by the user.
 
 ## Supported elements
 
@@ -22,4 +22,4 @@ Scenes support duration, background, accent, accessible description, rise/slide/
 
 ## Current limits
 
-This is an initial procedural graphics/composition prototype, not the complete engine. The MP4 renderer currently renders text, rectangles, lines and progress bars on color backgrounds; it does not yet reproduce the HTML preview camera moves/transitions, render circles, synthesize speech, generate realistic footage, import external fonts, or provide a full keyframe/timeline editor. It produces silent MP4 files. Automated FFmpeg/FFprobe smoke tests verify the supported MP4 path, but every production still needs visual review.
+This is an initial procedural graphics/composition prototype, not the complete engine. The MP4 renderer currently renders text, rectangles, lines and progress bars on color backgrounds; it does not yet reproduce the HTML preview camera moves/transitions, render circles, synthesize speech, generate realistic footage, import external fonts, or provide a full keyframe/timeline editor. It produces silent MP4 files unless local voiceover or music files are supplied. The renderer does not synthesize speech. Automated FFmpeg/FFprobe smoke tests verify the supported MP4 path, but every production still needs visual review.
