@@ -5,6 +5,10 @@ The default production path must not require a remote image/video generation pro
 
 "Standalone" means no remote media-generation service. It does not mean no execution environment: a compatible agent host or local runtime is still required to run code and export files.
 
+## Current implementation snapshot (2026-11-04)
+
+Implemented prototypes: an extensible style/editing catalog; a self-contained SVG/HTML scene generator; an FFmpeg renderer for text, rectangles, lines and progress bars; optional local voiceover/music mixing; basic zoom/pan camera moves; cross-scene transitions; and CI smoke tests for generated MP4 metadata. The procedural renderer is still deliberately limited and does not yet implement the full visual element library, all preview effects, speech synthesis, captions, rich motion-graphics components, or end-to-end long-form editing. Treat these as prototypes until the latest CI run passes and the output receives human visual/audio review.
+
 ## Milestones
 1. **Creative system** — universal style taxonomy, style bible, genre adaptation, storyboard and beat map.
 2. **Procedural graphics** — reusable SVG/Canvas/HTML scene components, title systems, diagrams, charts, backgrounds, icons and original vector characters.
