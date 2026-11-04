@@ -20,6 +20,9 @@ try {
   assert.match(html,/#68d5ff/);
   assert.match(html,/transition-wipe-left/);
   assert.match(html,/<polygon points=/);
+  assert.match(html,/<linearGradient id="bg-gradient-0"/);
+  assert.match(html,/stop-color="#101827"/);
+  assert.match(html,/stop-color="#68d5ff"/);
   assert.match(html,/star/);
   assert.doesNotMatch(html,/<script[^>]+src=/i);
   console.log("Procedural scene engine smoke test passed.");
