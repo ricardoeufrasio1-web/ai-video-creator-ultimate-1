@@ -120,3 +120,12 @@ Classify the session:
 A Skill cannot grant missing tools, subscriptions, compute, API keys, storage, network access, or publishing permissions. Continue as far as the host allows and clearly state what is and is not possible. Never claim an asset, render, review, or publication succeeded unless the corresponding tool returned success and the output was verified.
 
 For platform-neutral installation, capability levels, provider adapter expectations, rendering checks, and publishing approval, read `docs/agent-compatibility.md`.
+
+
+## Integration contracts and render roadmap
+
+- Provider-neutral adapter requirements: `docs/provider-adapter-contract.md`
+- Full timeline-to-render implementation plan and acceptance criteria: `docs/full-render-integration-plan.md`
+- Example adapter capability descriptor: `examples/providers/adapter.example.json`
+
+Do not describe a provider adapter as implemented merely because its contract or example exists. The current repository still needs concrete provider integrations and a verified real MP4 render.
