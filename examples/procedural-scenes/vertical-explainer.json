@@ -15,9 +15,33 @@
       "animation": "pop",
       "camera": "push-in",
       "elements": [
-        {"type":"text","text":"YOUR BODY","x":540,"y":700,"size":92,"weight":900,"fill":"#ffffff"},
-        {"type":"text","text":"NEEDS WATER","x":540,"y":820,"size":84,"weight":900,"fill":"#68d5ff"},
-        {"type":"rect","x":290,"y":930,"width":500,"height":12,"radius":6,"fill":"#fbbf24"}
+        {
+          "type": "text",
+          "text": "YOUR BODY",
+          "x": 540,
+          "y": 700,
+          "size": 92,
+          "weight": 900,
+          "fill": "#ffffff"
+        },
+        {
+          "type": "text",
+          "text": "NEEDS WATER",
+          "x": 540,
+          "y": 820,
+          "size": 84,
+          "weight": 900,
+          "fill": "#68d5ff"
+        },
+        {
+          "type": "rect",
+          "x": 290,
+          "y": 930,
+          "width": 500,
+          "height": 12,
+          "radius": 6,
+          "fill": "#fbbf24"
+        }
       ]
     },
     {
@@ -28,11 +52,46 @@
       "camera": "pan-left",
       "transition": "wipe-left",
       "elements": [
-        {"type":"text","text":"HYDRATION","x":540,"y":550,"size":76,"fill":"#68d5ff"},
-        {"type":"text","text":"supports normal body functions","x":540,"y":680,"size":44,"weight":600,"fill":"#ffffff"},
-        {"type":"circle","x":540,"y":1000,"radius":150,"fill":"#1d4ed8","opacity":0.8},
-        {"type":"text","text":"H₂O","x":540,"y":1010,"size":100,"fill":"#ffffff"}
+        {
+          "type": "text",
+          "text": "HYDRATION",
+          "x": 540,
+          "y": 550,
+          "size": 76,
+          "fill": "#68d5ff"
+        },
+        {
+          "type": "text",
+          "text": "supports normal body functions",
+          "x": 540,
+          "y": 680,
+          "size": 44,
+          "weight": 600,
+          "fill": "#ffffff"
+        },
+        {
+          "type": "circle",
+          "x": 540,
+          "y": 1000,
+          "radius": 150,
+          "fill": "#1d4ed8",
+          "opacity": 0.8
+        },
+        {
+          "type": "text",
+          "text": "H₂O",
+          "x": 540,
+          "y": 1010,
+          "size": 100,
+          "fill": "#ffffff"
+        }
       ]
     }
-  ]
+  ],
+  "theme": {
+    "background": "#101827",
+    "accent": "#68d5ff",
+    "text": "#ffffff",
+    "muted": "#c6d0dc"
+  }
 }
