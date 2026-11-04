@@ -49,6 +49,9 @@ def validate(project, project_dir):
             ids.add(sid)
         if not isinstance(scene.get("duration"), (int, float)) or not 0 < scene["duration"] <= 300:
             errors.append(f"scenes[{i}].duration must be >0 and <=300.")
+        camera = scene.get("camera", "static")
+        if camera not in {"static", "zoom-in", "zoom-out", "pan-left", "pan-right"}:
+            errors.append(f"Unsupported camera preset at scenes[{i}].")
         elements = scene.get("elements")
         if not isinstance(elements, list) or not elements:
             errors.append(f"scenes[{i}].elements must be a non-empty array.")
@@ -140,6 +143,17 @@ def build_filter(project, project_dir):
                 filters.append(f"{chain}drawbox=x={x}:y={y}:w={box_width}:h={box_height}:color={track}:t=fill[v{i}_{j}a]")
                 filters.append(f"[v{i}_{j}a]drawbox=x={x}:y={y}:w={max(1, int(box_width * value))}:h={box_height}:color={fill}:t=fill[v{i}_{j}]")
                 chain = f"[v{i}_{j}]"
+        camera = scene.get("camera", "static")
+        if camera == "zoom-in":
+            filters.append(f"{chain}zoompan=z='min(zoom+0.0015,1.12)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={width}x{height}:fps={fps},format=yuv420p[cam{i}]")
+            chain = f"[cam{i}]"
+        elif camera == "zoom-out":
+            filters.append(f"{chain}zoompan=z='if(eq(on,0),1.12,max(1.0,zoom-0.0015))':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={width}x{height}:fps={fps},format=yuv420p[cam{i}]")
+            chain = f"[cam{i}]"
+        elif camera in {"pan-left", "pan-right"}:
+            x_expr = "(iw-iw/zoom)*on/nb_frames" if camera == "pan-left" else "(iw-iw/zoom)*(1-on/nb_frames)"
+            filters.append(f"{chain}zoompan=z='1.06':x='{x_expr}':y='ih/2-(ih/zoom/2)':d=1:s={width}x{height}:fps={fps},format=yuv420p[cam{i}]")
+            chain = f"[cam{i}]"
         label = f"scene{i}"
         filters.append(f"{chain}format=yuv420p[{label}]")
         video_labels.append(f"[{label}]")
