@@ -116,3 +116,7 @@ An experimental local FFmpeg renderer is available at `tools/ffmpeg-render/`. It
 ## Implementation status — important
 
 The repository currently contains an experimental FFmpeg assembly renderer and procedural-engine design specifications. The new style catalog, editing grammar and autonomous engine roadmap document the target. They do not mean the full procedural animation engine is already implemented. The next engineering milestone is executable scene generation, reusable animation components, renderer integration and end-to-end tests. Do not advertise the complete autonomous engine as ready until those acceptance tests pass.
+
+## Download the installable Skill package
+
+After the repository quality workflow completes successfully, open the [GitHub Actions runs](https://github.com/ricardoeufrasio1-web/ai-video-creator-ultimate-1/actions), select the latest successful **Repository quality** run, and download the artifact named **ai-video-creator-ultimate-skill**. The ZIP is the portable Agent Skill package; installation and code-execution support depend on the target agent host. CI artifacts are retained for 30 days.
