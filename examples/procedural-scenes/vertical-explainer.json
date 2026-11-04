@@ -1,0 +1,35 @@
+{
+  "title": "Why Hydration Matters",
+  "language": "en",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "background": "#101827",
+  "accent": "#68d5ff",
+  "scenes": [
+    {
+      "id": "hook",
+      "duration": 3,
+      "title": "Hook",
+      "description": "A bold opening title with a bright accent bar",
+      "animation": "pop",
+      "elements": [
+        {"type":"text","text":"YOUR BODY","x":540,"y":700,"size":92,"weight":900,"fill":"#ffffff"},
+        {"type":"text","text":"NEEDS WATER","x":540,"y":820,"size":84,"weight":900,"fill":"#68d5ff"},
+        {"type":"rect","x":290,"y":930,"width":500,"height":12,"radius":6,"fill":"#fbbf24"}
+      ]
+    },
+    {
+      "id": "fact",
+      "duration": 4,
+      "title": "Simple visual fact",
+      "animation": "slide",
+      "elements": [
+        {"type":"text","text":"HYDRATION","x":540,"y":550,"size":76,"fill":"#68d5ff"},
+        {"type":"text","text":"supports normal body functions","x":540,"y":680,"size":44,"weight":600,"fill":"#ffffff"},
+        {"type":"circle","x":540,"y":1000,"radius":150,"fill":"#1d4ed8","opacity":0.8},
+        {"type":"text","text":"H₂O","x":540,"y":1010,"size":100,"fill":"#ffffff"}
+      ]
+    }
+  ]
+}
