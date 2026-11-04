@@ -217,6 +217,7 @@ def main():
     print(json.dumps({"status":"succeeded","output":str(output),"bytes":output.stat().st_size,
                       "duration_seconds":round(total,3),"scenes":len(scenes),
                       "audio_tracks":len(audio) + len(normalized_cues),"audio_cues":len(normalized_cues),
+                      "transition":transition.get("type") if transition else "hard_cut",
                       "soft_subtitles":bool(captions)}, indent=2))
 
 if __name__ == "__main__":
