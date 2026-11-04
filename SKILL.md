@@ -64,3 +64,19 @@ Adapt the plan to vertical 9:16, square 1:1, landscape 16:9, or other requested 
 ## Reference projects and licensing
 
 Treat external repositories and tools as technical references, not automatically reusable code. Before copying or redistributing code, verify the exact version, license, dependency licenses, attribution requirements, and commercial-use restrictions. Keep third-party notices where required. The license for this skill covers only original files in this repository and does not relicense external tools, models, media, fonts, or APIs.
+
+
+## Specialist modules
+
+Load the relevant module guidance for the task instead of applying every specialist workflow to every video:
+
+- `modules/research.md` — evidence gathering and fact-checking.
+- `modules/scriptwriting.md` — hooks, narration, dialogue, pacing, and CTA.
+- `modules/creative-direction.md` — storyboard, camera, lighting, and continuity.
+- `modules/asset-production.md` — image, video, voice, audio, and graphics assets.
+- `modules/editing-hyperframes.md` — composition and rendering with HyperFrames.
+- `modules/audio.md` — narration, music, effects, and mixing.
+- `modules/quality-assurance.md` — pre-delivery inspection.
+- `modules/publishing.md` — metadata, captions, credits, and handoff.
+
+Select modules according to the user's request, available tools, and production stage. The core workflow remains usable when a module or external tool is unavailable.
