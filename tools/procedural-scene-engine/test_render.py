@@ -25,6 +25,6 @@ class ProceduralRenderTests(unittest.TestCase):
             video=next(s for s in data["streams"] if s["codec_type"]=="video")
             self.assertEqual((video["width"],video["height"]),(320,568))
             self.assertAlmostEqual(float(data["format"]["duration"]),3.0,delta=.15)
-            self.assertEqual(video["codec_name"],"h264")
+            self.assertEqual(video["codec_name"],"h264")\n            self.assertTrue(any(s["codec_type"]=="audio" for s in data["streams"]))
 
 if __name__=="__main__": unittest.main(verbosity=2)
