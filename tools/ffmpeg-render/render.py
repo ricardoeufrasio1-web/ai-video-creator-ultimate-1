@@ -57,7 +57,14 @@ def main():
             fail(f"Scene {index} duration must be between 0 and 3600 seconds")
         if kind not in ("image", "video"):
             fail(f"Scene {index} type must be image or video")
-        normalized.append((kind, resolve_asset(root, str(scene.get("src", ""))), duration))
+                try:
+            fade_in = float(scene.get("fade_in", 0))
+            fade_out = float(scene.get("fade_out", 0))
+        except (TypeError, ValueError):
+            fail(f"Scene {index} fade_in/fade_out must be numeric")
+        if fade_in < 0 or fade_out < 0 or fade_in > duration or fade_out > duration:
+            fail(f"Scene {index} has invalid fade values")
+        normalized.append((kind, resolve_asset(root, str(scene.get("src", ""))), duration, fade_in, fade_out))
         total += duration
     audio = []
     for key in ("voiceover", "music"):
@@ -107,7 +114,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix="ai-video-render-") as temp:
         temp = Path(temp)
         segments = []
-        for i, (kind, source, duration) in enumerate(normalized):
+        for i, (kind, source, duration, fade_in, fade_out) in enumerate(normalized):
             segment = temp / f"scene-{i:03d}.mp4"
             cmd = [ffmpeg, "-y", "-hide_banner", "-loglevel", "error"]
             if kind == "image":
@@ -115,6 +122,10 @@ def main():
             else:
                 cmd += ["-stream_loop", "-1", "-i", str(source)]
             vf = f"scale={width}:{height}:force_original_aspect_ratio=decrease,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2,setsar=1,fps={fps},format=yuv420p"
+            if fade_in:
+                vf += f",fade=t=in:st=0:d={fade_in}:color=black"
+            if fade_out:
+                vf += f",fade=t=out:st={max(0, duration-fade_out)}:d={fade_out}:color=black"
             cmd += ["-t", str(duration), "-vf", vf, "-an", "-c:v", "libx264",
                     "-preset", "veryfast", "-crf", "23", "-movflags", "+faststart", str(segment)]
             run(cmd)
