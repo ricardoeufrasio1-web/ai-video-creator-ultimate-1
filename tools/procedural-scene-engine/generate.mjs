@@ -26,7 +26,7 @@ function validate(p) {
     if (!Array.isArray(s.elements) || !s.elements.length) e.push("scenes["+i+"].elements must contain at least one element.");
     for (const [j,x] of (Array.isArray(s.elements)?s.elements:[]).entries()) {
       if (!x || typeof x!=="object") { e.push("Invalid element at scene "+i+", index "+j); continue; }
-      if (!["text","rect","circle","line","bar"].includes(x.type)) e.push("Unsupported element type at scene "+i+", index "+j+".");
+      if (!["text","rect","circle","line","bar","triangle","diamond","star"].includes(x.type)) e.push("Unsupported element type at scene "+i+", index "+j+".");
       if (x.text!==undefined && typeof x.text!=="string") e.push("Element text must be a string.");
       for (const k of ["x","y","width","height","radius","value"]) if (x[k]!==undefined && (!Number.isFinite(x[k]) || Math.abs(x[k])>100000)) e.push("Invalid numeric "+k+" at scene "+i+", index "+j+".");
     }
@@ -43,6 +43,12 @@ function renderElement(x, w, h, index, theme) {
   }
   if (x.type==="rect") return '<rect x="'+xx+'" y="'+yy+'" width="'+clamp(x.width??240,1,w*2)+'" height="'+clamp(x.height??120,1,h*2)+'" rx="'+clamp(x.radius??12,0,200)+'" '+common+' class="element enter e'+index+'"/>';
   if (x.type==="circle") return '<circle cx="'+xx+'" cy="'+yy+'" r="'+clamp(x.radius??80,1,Math.max(w,h))+'" '+common+' class="element enter e'+index+'"/>';
+  if (["triangle","diamond","star"].includes(x.type)) {
+    const size=clamp(x.size??120,8,Math.max(w,h));
+    const points=x.type==="triangle"?"0,-0.58 0.5,0.42 -0.5,0.42":x.type==="diamond"?"0,-0.58 0.5,0 0,0.58 -0.5,0":"0,-0.62 0.14,-0.2 0.58,-0.2 0.23,0.08 0.36,0.55 0,0.27 -0.36,0.55 -0.23,0.08 -0.58,-0.2 -0.14,-0.2";
+    const pts=points.split(" ").map(pair=>{const [px,py]=pair.split(",").map(Number);return (xx+px*size)+","+(yy+py*size)}).join(" ");
+    return '<polygon points="'+pts+'" '+common+' class="element enter e'+index+'"/>';
+  }
   if (x.type==="line") return '<path d="M '+xx+' '+yy+' l '+(x.width??220)+' '+(x.height??0)+'" fill="none" stroke="'+fill+'" stroke-width="'+clamp(x.strokeWidth??8,1,100)+'" stroke-linecap="round" class="element enter e'+index+'"/>';
   const bw=clamp(x.width??w*.6,1,w), bh=clamp(x.height??28,1,h), value=clamp(x.value??.7,0,1);
   return '<g class="element enter e'+index+'"><rect x="'+xx+'" y="'+yy+'" width="'+bw+'" height="'+bh+'" rx="'+(bh/2)+'" fill="'+color(x.track,"#334155")+'"/><rect x="'+xx+'" y="'+yy+'" width="'+(bw*value)+'" height="'+bh+'" rx="'+(bh/2)+'" fill="'+fill+'"/></g>';
