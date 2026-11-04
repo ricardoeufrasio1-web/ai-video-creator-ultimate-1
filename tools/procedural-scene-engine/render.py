@@ -62,6 +62,21 @@ def validate(project, project_dir):
             for key in ("x", "y", "width", "height", "size", "value"):
                 if key in element and (not isinstance(element[key], (int, float)) or abs(element[key]) > 100000):
                     errors.append(f"Invalid {key} at scenes[{i}].elements[{j}].")
+    transition = project.get("transition")
+    if transition is not None:
+        allowed = {"fade", "dissolve", "wipeleft", "wiperight", "slideleft", "slideright", "circleopen", "circleclose"}
+        if not isinstance(transition, dict) or transition.get("type") != "crossfade":
+            errors.append("transition.type must be crossfade.")
+        else:
+            duration = transition.get("duration")
+            if len(scenes) < 2:
+                errors.append("transition requires at least two scenes.")
+            if transition.get("effect", "fade") not in allowed:
+                errors.append("Unsupported transition effect.")
+            if not isinstance(duration, (int, float)) or not 0.05 <= duration <= 5:
+                errors.append("transition.duration must be from 0.05 to 5 seconds.")
+            elif any(not isinstance(scene, dict) or not isinstance(scene.get("duration"), (int, float)) or scene["duration"] <= duration for scene in scenes):
+                errors.append("Every scene must be longer than the transition duration.")
     for key in ("voiceover", "music"):
         audio = project.get(key)
         if audio is None:
@@ -128,12 +143,25 @@ def build_filter(project, project_dir):
         label = f"scene{i}"
         filters.append(f"{chain}format=yuv420p[{label}]")
         video_labels.append(f"[{label}]")
-    if len(video_labels) == 1:
+    transition = project.get("transition")
+    if transition:
+        duration = float(transition["duration"])
+        effect = transition.get("effect", "fade")
+        previous = video_labels[0]
+        offset = float(project["scenes"][0]["duration"]) - duration
+        for index in range(1, len(video_labels)):
+            output_label = f"xfade{index}"
+            filters.append(f"{previous}{video_labels[index]}xfade=transition={effect}:duration={duration:.6f}:offset={offset:.6f}[{output_label}]")
+            previous = f"[{output_label}]"
+            if index < len(video_labels) - 1:
+                offset += float(project["scenes"][index]["duration"]) - duration
+        filters.append(f"{previous}null[outv]")
+    elif len(video_labels) == 1:
         filters.append(f"{video_labels[0]}null[outv]")
     else:
         filters.append("".join(video_labels) + f"concat=n={len(video_labels)}:v=1:a=0[outv]")
 
-    total_duration = sum(float(scene["duration"]) for scene in project["scenes"])
+    total_duration = sum(float(scene["duration"]) for scene in project["scenes"]) - (float(transition["duration"]) * max(0, len(project["scenes"]) - 1) if transition else 0)
     audio_labels = []
     for key in ("voiceover", "music"):
         spec = project.get(key)
