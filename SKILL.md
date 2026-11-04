@@ -104,3 +104,19 @@ For every production, clearly report:
 - whether the MP4 file exists and was verified;
 - whether visual/audio review was performed;
 - any remaining manual steps, costs, or permissions.
+
+
+## Cross-agent compatibility and capability discovery
+
+This skill uses the open Agent Skills convention and is not tied to one AI provider. Before production, inspect the tools actually available in the current chat. Do not assume another product's browser, terminal, filesystem, image/video generation, voice, renderer, storage, or publishing integrations are available here.
+
+Classify the session:
+- **Chat only:** deliver research (if browsing exists), brief, script, storyboard, prompts, asset plan, and handoff instructions.
+- **Files/workspace:** also create editable project files and packages.
+- **Media runtime:** render only after verifying the renderer, FFmpeg, dependencies, assets, and output.
+- **Generation providers:** generate media only through connected, authorized providers; disclose quotas and costs.
+- **Publishing integrations:** publish only through an authorized connection and after explicit user approval.
+
+A Skill cannot grant missing tools, subscriptions, compute, API keys, storage, network access, or publishing permissions. Continue as far as the host allows and clearly state what is and is not possible. Never claim an asset, render, review, or publication succeeded unless the corresponding tool returned success and the output was verified.
+
+For platform-neutral installation, capability levels, provider adapter expectations, rendering checks, and publishing approval, read `docs/agent-compatibility.md`.
