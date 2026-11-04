@@ -75,3 +75,10 @@ HyperFrames is the primary composition/rendering reference. It is not bundled. I
 ## License
 
 Original documentation and skill files are licensed under MIT; see [LICENSE](LICENSE). This does not change licenses or terms for HyperFrames, FFmpeg, Remotion, third-party software, models, APIs, fonts, music, footage, or generated assets.
+
+
+## Cross-agent portability
+
+This project follows the open Agent Skills folder convention. Import it into any AI chat/agent that explicitly supports Agent Skills. The format makes the instructions portable; it does not guarantee that every host can execute scripts, generate media, render MP4, or publish. Those actions require tools, workspace access, runtime dependencies, provider connections, and permissions supplied by the host.
+
+For compatibility guidance and the current execution limits, see [docs/agent-compatibility.md](docs/agent-compatibility.md).
