@@ -43,6 +43,20 @@ class ProceduralValidationTests(unittest.TestCase):
         errors = validate(self.project, self.folder)
         self.assertTrue(any("Caption timing" in error for error in errors))
 
+    def test_accepts_vector_glyph_shapes(self):
+        self.project["scenes"][0]["elements"].extend([
+            {"type": "circle", "x": 100, "y": 100, "size": 40},
+            {"type": "triangle", "x": 150, "y": 100, "size": 40},
+            {"type": "diamond", "x": 200, "y": 100, "size": 40},
+            {"type": "star", "x": 250, "y": 100, "size": 40}
+        ])
+        self.assertEqual(validate(self.project, self.folder), [])
+
+    def test_rejects_unknown_shape(self):
+        self.project["scenes"][0]["elements"].append({"type": "hexagon"})
+        errors = validate(self.project, self.folder)
+        self.assertTrue(any("Unsupported element" in error for error in errors))
+
     def test_rejects_transition_longer_than_scene(self):
         self.project["transition"] = {"type": "crossfade", "duration": 2, "effect": "fade"}
         errors = validate(self.project, self.folder)
