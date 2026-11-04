@@ -6,5 +6,5 @@
   "scenes": [
     { "id": "opening", "type": "image", "src": "fixture.ppm", "duration": 2 }
   ],
-  "voiceover": "voice.wav"
+  "voiceover": "voice.wav",\n  "voiceover_offset": 0.1,\n  "captions": "captions.srt"
 }
