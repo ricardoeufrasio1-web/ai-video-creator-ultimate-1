@@ -1,0 +1,88 @@
+{
+  "title": "One-command offline narrated video",
+  "width": 320,
+  "height": 568,
+  "fps": 24,
+  "background": "#101827",
+  "scenes": [
+    {
+      "id": "hook",
+      "duration": 1.5,
+      "background": "#101827",
+      "elements": [
+        {
+          "type": "text",
+          "text": "VIDEO PRONTO",
+          "x": 160,
+          "y": 190,
+          "size": 26,
+          "fill": "#ffffff"
+        },
+        {
+          "type": "rect",
+          "x": 45,
+          "y": 245,
+          "width": 230,
+          "height": 8,
+          "fill": "#68d5ff"
+        },
+        {
+          "type": "bar",
+          "x": 55,
+          "y": 310,
+          "width": 210,
+          "height": 18,
+          "value": 0.72,
+          "fill": "#fbbf24",
+          "track": "#334155"
+        },
+        {
+          "type": "caption",
+          "text": "UM EXEMPLO DE LEGENDA",
+          "x": 160,
+          "y": 490,
+          "size": 15,
+          "fill": "#ffffff",
+          "delay": 0.2,
+          "duration": 1.1
+        }
+      ],
+      "camera": "zoom-in"
+    },
+    {
+      "id": "payoff",
+      "duration": 1.5,
+      "background": "#172554",
+      "elements": [
+        {
+          "type": "text",
+          "text": "CENA 02",
+          "x": 160,
+          "y": 220,
+          "size": 32,
+          "fill": "#68d5ff"
+        },
+        {
+          "type": "line",
+          "x": 70,
+          "y": 300,
+          "width": 180,
+          "height": 0,
+          "strokeWidth": 6,
+          "fill": "#ffffff"
+        }
+      ],
+      "camera": "pan-left"
+    }
+  ],
+  "transition": {
+    "type": "crossfade",
+    "duration": 0.25,
+    "effect": "dissolve"
+  },
+  "narration": {
+    "text": "Olá! Este é um vídeo criado com animações e narração local, sem chamadas a serviços externos.",
+    "voice": "pt-br",
+    "speed": 155
+  }
+}
