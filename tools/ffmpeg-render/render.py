@@ -43,8 +43,21 @@ def main():
         fail("Width, height, and fps must be integers")
     if not (16 <= width <= 8192 and 16 <= height <= 8192 and 1 <= fps <= 120):
         fail("Invalid width, height, or fps")
+    transition = project.get("transition")
+    transition_duration = 0.0
+    if transition is not None:
+        if not isinstance(transition, dict) or transition.get("type") != "crossfade":
+            fail("transition must be an object with type crossfade")
+        try:
+            transition_duration = float(transition.get("duration", 0.5))
+        except (TypeError, ValueError):
+            fail("transition.duration must be numeric")
+        if transition_duration <= 0 or transition_duration > 10:
+            fail("transition.duration must be greater than 0 and at most 10 seconds")
+        if len(scenes) < 2:
+            fail("A transition requires at least two scenes")
     root = project_file.parent
-    normalized, total = [], 0.0
+    normalized, scene_duration_total = [], 0.0
     for index, scene in enumerate(scenes):
         if not isinstance(scene, dict):
             fail(f"Scene {index} must be an object")
@@ -64,8 +77,11 @@ def main():
             fail(f"Scene {index} fade_in/fade_out must be numeric")
         if fade_in < 0 or fade_out < 0 or fade_in > duration or fade_out > duration:
             fail(f"Scene {index} has invalid fade values")
+        if transition_duration and duration <= transition_duration:
+            fail(f"Scene {index} duration must be longer than the crossfade duration")
         normalized.append((kind, resolve_asset(root, str(scene.get("src", ""))), duration, fade_in, fade_out))
-        total += duration
+        scene_duration_total += duration
+    total = scene_duration_total - transition_duration * max(0, len(normalized) - 1)
     audio = []
     for key in ("voiceover", "music"):
         if project.get(key):
@@ -130,11 +146,32 @@ def main():
                     "-preset", "veryfast", "-crf", "23", "-movflags", "+faststart", str(segment)]
             run(cmd)
             segments.append(segment)
-        concat = temp / "concat.txt"
-        concat.write_text("".join(f"file '{p.as_posix()}'\n" for p in segments), encoding="utf-8")
         silent = temp / "silent.mp4"
-        run([ffmpeg, "-y", "-hide_banner", "-loglevel", "error", "-f", "concat",
-             "-safe", "0", "-i", str(concat), "-c", "copy", str(silent)])
+        if transition_duration:
+            transition_filters = []
+            elapsed = normalized[0][2]
+            previous = "[0:v]"
+            for i in range(1, len(segments)):
+                output_label = f"[xf{i}]"
+                offset = elapsed - transition_duration
+                transition_filters.append(
+                    f"{previous}[{i}:v]xfade=transition=fade:duration={transition_duration}:offset={offset}{output_label}"
+                )
+                previous = output_label
+                elapsed += normalized[i][2] - transition_duration
+            transition_cmd = [ffmpeg, "-y", "-hide_banner", "-loglevel", "error"]
+            for segment in segments:
+                transition_cmd += ["-i", str(segment)]
+            transition_cmd += ["-filter_complex", ";".join(transition_filters),
+                               "-map", previous, "-an", "-t", str(total),
+                               "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
+                               "-pix_fmt", "yuv420p", str(silent)]
+            run(transition_cmd)
+        else:
+            concat = temp / "concat.txt"
+            concat.write_text("".join(f"file '{p.as_posix()}'\n" for p in segments), encoding="utf-8")
+            run([ffmpeg, "-y", "-hide_banner", "-loglevel", "error", "-f", "concat",
+                 "-safe", "0", "-i", str(concat), "-c", "copy", str(silent)])
         cmd = [ffmpeg, "-y", "-hide_banner", "-loglevel", "error", "-i", str(silent)]
         for _, path, _ in audio:
             cmd += ["-i", str(path)]
