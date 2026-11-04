@@ -59,7 +59,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg
-          python3 -m py_compile tools/procedural-scene-engine/render.py tools/procedural-scene-engine/test_render.py tools/ffmpeg-render/render.py tools/ffmpeg-render/create_fixture.py tools/ffmpeg-render/test_validation.py
+          python3 -m py_compile tools/procedural-scene-engine/render.py tools/procedural-scene-engine/test_render.py tools/procedural-scene-engine/test_validation.py
+          python3 tools/procedural-scene-engine/test_validation.py tools/ffmpeg-render/render.py tools/ffmpeg-render/create_fixture.py tools/ffmpeg-render/test_validation.py
           python3 tools/procedural-scene-engine/test_render.py
           python3 tools/ffmpeg-render/test_validation.py
           python3 tools/ffmpeg-render/create_fixture.py
