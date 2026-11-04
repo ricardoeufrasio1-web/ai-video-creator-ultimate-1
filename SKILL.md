@@ -2,13 +2,24 @@
 name: ai-video-creator-ultimate
 description: Universal, tool-aware AI video production skill. Use when a user wants to plan, create, edit, render, review, or publish videos from an idea, brief, article, product, script, or source assets across niches, languages, and platforms.
 license: MIT
-compatibility: Requires an agent that can read skill resources. Full automation additionally requires execution tools, filesystem or workspace access, media tools, and configured generation providers.
+compatibility: Requires an Agent Skills-compatible host. Procedural video production requires code execution, filesystem access, and a verified renderer. Remote image/video generation providers are optional and are not part of the default workflow.
 metadata:
   author: ricardoeufrasio1-web
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # AI Video Creator Ultimate
+
+## Product direction: autonomous, provider-free production by default
+
+The default path must create original visual material with the project's own procedural graphics, animation, typography, diagrams, compositing and editing code. Do not require or silently call external AI image/video generation services. External providers are optional only when the user explicitly requests them. The goal is a single conversational creative director and production engine, not a prompt pack that hands the work to other generators.
+
+The engine should support a broad, extensible range of visual languages: live-action looks as references, documentary, UGC, commercial, food, travel, sports, news, education, storytelling, 2D/3D-inspired graphics, vector, hand-drawn, collage, stop-motion-inspired, infographic, kinetic typography, data visualization, abstract and hybrid styles. It must allow custom styles and combinations. See docs/style-catalog.md.
+
+For attention-focused editing, use modules/viral-editing-language.md: hooks, pattern interrupts, pacing, punch-ins, match cuts, speed ramps, dynamic transitions, kinetic typography, sound accents, visual resets, payoff and loop endings. Virality is never guaranteed; clarity, truth and accessibility take priority.
+
+The no-provider engine can generate procedural graphics, original vector scenes, 2D/2.5D animation, motion design and complete edits from supplied assets. It cannot create arbitrary photorealistic footage or natural human performances without source footage or a generative model. Never imply otherwise. Rendering also requires a host that can execute code and write files; a text-only chat cannot render an MP4.
+
 
 A portable, modular workflow for producing videos across educational, documentary, marketing, recipe, entertainment, news, storytelling, tutorial, product, and other niches. This skill is designed for any agent that supports the open Agent Skills format. It is not tied to one chat provider.
 
@@ -21,7 +32,7 @@ Classify the environment:
 - **Level 1 — Chat only:** can reason and write. Deliver research (if browsing exists), brief, script, storyboard, prompts, asset plan, and exact handoff instructions. Do not claim to create files, render, or publish.
 - **Level 2 — Chat + files/workspace:** can read/write project files and package an editable project. Render only if a renderer is installed and executable.
 - **Level 3 — Execution + media runtime:** can run scripts, access a filesystem, and use FFmpeg plus a supported renderer. Can assemble and render after preflight passes.
-- **Level 4 — Connected generation providers:** also has authorized image/video/voice/music generation services. Can generate assets subject to provider quotas, terms, and cost.
+- **Level 4 — Optional connected generation providers:** may use authorized external image/video/voice/music services only when explicitly requested. These are not required by the default procedural path.
 - **Level 5 — Publishing integrations:** also has authorized platform connectors/API access. Can publish only after the user explicitly approves the target account, content, and action.
 
 A skill cannot grant missing tools, subscriptions, compute, API keys, storage, network access, or publishing permissions. Never imply otherwise. Explain the highest level available and proceed as far as possible without blocking useful work.
@@ -38,7 +49,7 @@ The user should be able to describe the desired video in ordinary language. Ask 
 4. **Script:** write narration/dialogue and estimate realistic spoken duration. Preserve supplied wording exactly when requested.
 5. **Storyboard:** specify scene IDs, timestamps, duration, action, framing, camera movement, lighting, location, props, continuity, narration, music, SFX, and transitions.
 6. **Asset plan:** identify footage, generated images/video, voice, music, effects, graphics, references, rights, consent, provenance, and fallback options.
-7. **Asset production:** use available authorized providers or user assets. Keep provider-specific operations behind adapters. Never fabricate an asset URL or claim generation succeeded without a returned file.
+7. **Asset production:** default to original procedural graphics, vector illustrations, diagrams, typography, 2D/2.5D animation and user-supplied assets. Do not call external image/video generators unless explicitly requested. Keep optional provider operations behind adapters. Never fabricate an asset URL or claim generation succeeded without a returned file.
 8. **Timeline:** define FPS, dimensions, frame boundaries, tracks, transitions, audio cues, captions, and asset references. Validate before rendering.
 9. **Edit and render:** prefer HyperFrames when installed and verified; use FFmpeg for media inspection, conversion, trimming, mixing, and encoding. Remotion or another renderer may be used through an adapter. Verify the actual output file.
 10. **Quality assurance:** check facts, spelling, timing, continuity, visual artifacts, safe areas, aspect ratio, audio clipping/loudness, captions, stream metadata, and export settings. Distinguish automated checks from human review.
@@ -134,3 +145,18 @@ Do not describe a provider adapter as implemented merely because its contract or
 ## Local MP4 rendering adapter (experimental)
 
 When Python and FFmpeg are available, the agent may use `tools/ffmpeg-render/render.py` to assemble a local timeline of image/video assets and optional voiceover/music into MP4. Read `tools/ffmpeg-render/README.md` for its deliberately limited schema and constraints. Do not describe this as AI generation, full HyperFrames timeline support, or automatic publishing. CI performs a deterministic FFmpeg render smoke test; final projects still require visual/audio review.
+
+
+## Default provider-free production contract
+
+When the user asks to create a video without external AI services:
+1. Select a realizable visual style from the catalog or define a custom style bible.
+2. Write a complete script and frame/time-based storyboard.
+3. Generate visuals using code-authored SVG, HTML/CSS/Canvas, vector characters, diagrams, charts, procedural backgrounds and motion graphics.
+4. Animate using deterministic keyframes, easing, camera transforms, parallax, masks and transitions.
+5. Edit to a beat map with intentional cuts, pacing changes, overlays, captions and sound design.
+6. Use user-provided audio or a verified local TTS/audio engine if installed; otherwise do not invent a voice track.
+7. Render with the bundled engine only after it is implemented and verified, or with a verified host renderer.
+8. Validate the actual MP4 and report the visual style, duration, dimensions, audio tracks and remaining limitations.
+
+Do not describe the procedural engine as complete until source code, tests, package inclusion, and an end-to-end MP4 render test all pass. See docs/autonomous-engine-roadmap.md.
