@@ -18,7 +18,7 @@ class PipelineIntegrationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             folder = Path(tmp)
             project = json.loads(FIXTURE.read_text(encoding="utf-8"))
-            project["narration"] = {"text": "Olá! Este vídeo foi criado sem serviços externos.", "voice": "pt-br"}
+            project["narration"] = {"text": "Olá! Este vídeo foi criado sem serviços externos.", "voice": "pt-br", "allow_robotic_espeak": True}
             project_file = folder / "project.json"
             project_file.write_text(json.dumps(project, ensure_ascii=False), encoding="utf-8")
             output = folder / "result.mp4"
