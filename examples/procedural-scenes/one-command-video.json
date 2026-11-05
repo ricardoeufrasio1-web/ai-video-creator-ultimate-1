@@ -83,6 +83,7 @@
   "narration": {
     "text": "Olá! Este é um vídeo criado com animações e narração local, sem chamadas a serviços externos.",
     "voice": "pt-br",
-    "speed": 155
+    "speed": 145,
+    "allow_robotic_espeak": true
   }
 }
