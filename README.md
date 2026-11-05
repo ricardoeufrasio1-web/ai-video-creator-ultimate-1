@@ -42,7 +42,8 @@ See docs/style-catalog.md, modules/procedural-visual-engine.md, modules/viral-ed
 
 - Turns an idea, brief, article, product, script, or source assets into a production plan.
 - Supports educational, documentary, marketing, recipe, entertainment, news, storytelling, tutorial, product, and other niches.
-- Creates timed scripts, storyboards, shot lists, scene prompts, continuity notes, and asset manifests.\n- Includes a provider-free procedural SVG/HTML scene generator, an FFmpeg MP4 renderer for text/vector primitives with transitions and local audio mixing, and an optional offline eSpeak NG narration helper.
+- Creates timed scripts, storyboards, shot lists, scene prompts, continuity notes, and asset manifests.
+- Includes a provider-free procedural SVG/HTML scene generator, an FFmpeg MP4 renderer for text/vector primitives with transitions and local audio mixing, and an explicitly opt-in, draft-only robotic eSpeak NG narration helper. Includes a Google Flow prompt standard for natural pt-BR voice direction, scene continuity, avatar consistency, and reference-image chronology.
 - Uses HyperFrames as the preferred editing/rendering workflow when the environment supports it.
 - Includes project generation plus asset, timeline, and rendered-output metadata preflight tools.
 - Uses FFmpeg for media operations when available; treats Remotion and other renderers as optional adapters.
