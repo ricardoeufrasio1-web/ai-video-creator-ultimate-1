@@ -1,6 +1,6 @@
 # Voice Production
 
-This module covers recorded narration and text-to-speech across providers. Keep the voice workflow independent from any one vendor.
+This module covers recorded narration and text-to-speech across providers. Keep the voice workflow independent from any one vendor. For Google Flow/avatar/recipe prompts, also apply `modules/google-flow-prompting.md`.
 
 ## 1. Lock the approved script
 
@@ -14,26 +14,28 @@ Maintain:
 - emotional direction, pace, and intended audience;
 - segment IDs and target timing.
 
-## 2. Select and document a voice
+## 2. Select and direct a voice
 
-Choose a voice that fits the audience, subject, language, and channel. Record provider, voice/model identifier, settings, generation date, and permitted usage scope. Provider availability, pricing, limits, and commercial terms can change; verify them at production time.
+Choose a voice that fits the audience, subject, and channel. Record provider, voice/model identifier, settings, generation date, and permitted usage scope. Provider availability, pricing, limits, and commercial terms can change; verify them at production time.
+
+For Brazilian social videos when requested, direct the voice as native Brazilian Portuguese (pt-BR), natural conversational cadence, clear and intelligible, moderate pace, emotionally appropriate, with subtle breaths and meaningful pauses. For female-avatar recipe/UGC videos, use a female Brazilian voice unless the user specifies otherwise. A male storyteller voice is only used when requested. Avoid robotic/monotone delivery, unnatural vowel shaping, exaggerated announcer energy, rushed speech, European Portuguese, or overly deliberate diction. Voice direction must fit the meaning of the line, not be a contradictory pile of adjectives.
 
 Do not clone or imitate a real person's voice without clear authorization. Do not imply that a synthetic voice is a real person or an endorsement.
 
 ## 3. Generate in manageable segments
 
-Split narration at natural sentence or thought boundaries. Preserve a stable speaker and consistent settings across segments. Generate alternate takes only when useful, and label them clearly. Avoid splitting in the middle of a phrase unless the edit specifically requires it.
+Split narration at natural sentence or thought boundaries. Preserve a stable speaker and consistent settings across segments. Generate alternate takes only when useful, and label them clearly. Avoid splitting in the middle of a phrase unless the edit specifically requires it. Do not compress a long script by forcing faster speech; shorten/revise script only with permission or flag the timing conflict.
 
 ## 4. Pronunciation and performance QA
 
 Listen to the full narration and check:
 - exact wording and omissions;
-- pronunciation, accent, and language variant;
+- pronunciation, Brazilian accent, and language variant;
 - natural pauses, emphasis, and breath;
 - clipping, distortion, noise, artifacts, and abrupt segment joins;
 - pace and intelligibility at the final playback size.
 
-Use a pronunciation dictionary or phonetic guidance where supported. Do not assume spelling fixes pronunciation in every provider.
+Reject and regenerate/re-record takes that sound robotic, wrongly accented, clipped, or rushed. Prompt adjectives alone cannot guarantee quality; listening to the rendered output is mandatory for final approval. Use a pronunciation dictionary or phonetic guidance where supported. Do not assume spelling fixes pronunciation in every provider.
 
 ## 5. Timing and synchronization
 
@@ -41,8 +43,12 @@ Create a cue sheet with segment IDs, text, start/end times, and source asset IDs
 
 ## 6. Mix and delivery
 
-Keep dialogue intelligible above music and effects. Use fades at edits, check peaks and loudness against the destination platform's current requirements, and avoid hard clipping. Preserve a clean voice master when practical.
+Keep dialogue intelligible above music and effects. Use fades at edits, check peaks and loudness against the destination platform's current requirements, and avoid hard clipping. Preserve a clean voice master when practical. For Flow prompt audio, narration should be foreground; music and SFX stay subtle and never mask words.
 
-## 7. Provenance and rights
+## 7. Offline eSpeak NG policy
+
+The bundled eSpeak NG helper is known to sound synthetic/robotic. It is **not** a natural voice solution and must not be selected automatically or represented as social-ready final narration. It now requires explicit `--allow-robotic-espeak` for direct use and `narration.allow_robotic_espeak: true` in pipeline JSON, and is intended only for drafts, timing tests, or accessibility prototypes. For final natural speech, use a human recording or a connected authorized high-quality voice provider. If none is available, deliver a silent render or project plus exact narration script rather than quietly substituting robotic speech.
+
+## 8. Provenance and rights
 
 Record whether audio is human-recorded, synthetic, licensed, or user-supplied. Confirm commercial-use permissions and any required disclosure. Store consent evidence securely and do not include private identity documents in public project assets.
