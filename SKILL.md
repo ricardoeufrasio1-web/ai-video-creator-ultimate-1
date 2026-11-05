@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires an Agent Skills-compatible host. Procedural video production requires code execution, filesystem access, and a verified renderer. Remote image/video generation providers are optional and are not part of the default workflow.
 metadata:
   author: ricardoeufrasio1-web
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # AI Video Creator Ultimate
@@ -39,7 +39,7 @@ A skill cannot grant missing tools, subscriptions, compute, API keys, storage, n
 
 ## User experience
 
-The user should be able to describe the desired video in ordinary language. Ask only for essential missing details; use sensible defaults for the rest. Do not make the user manually copy prompts between stages when the environment can execute the steps. Keep the user informed of decisions, blockers, costs, and approval points.
+The user should be able to describe the desired video in ordinary language. Ask only for essential missing details; use sensible defaults for the rest. Do not make the user manually copy prompts between stages when the environment can execute the steps. Keep the user informed of decisions, blockers, costs, and approval points. For Google Flow, avatar-led UGC, recipe or product videos, apply `modules/google-flow-prompting.md` as a required prompt-quality and continuity standard.
 
 ## End-to-end workflow
 
@@ -65,7 +65,7 @@ Use HyperFrames as the preferred composition/rendering workflow when the environ
 - Provider-free procedural scene generator: `tools/procedural-scene-engine/generate.mjs` (Node.js 22+), creates self-contained SVG/HTML compositions from JSON without remote assets.
 - One-command local pipeline: `tools/procedural-scene-engine/run_pipeline.py` optionally synthesizes offline narration, renders with FFmpeg, verifies the MP4 using FFprobe, and can write a QA metadata report. See its README for prerequisites and limitations.
 - Procedural MP4 renderer: `tools/procedural-scene-engine/render.py` uses local FFmpeg for text, timed captions, rectangles, lines, progress bars, camera moves, transitions and local audio mixing; see its README for limitations.
-- Optional offline narration: `tools/procedural-scene-engine/tts.py` uses a locally installed eSpeak NG executable; it does not use a remote AI service and its voice quality is synthetic/robotic.
+- Optional offline narration: `tools/procedural-scene-engine/tts.py` uses a locally installed eSpeak NG executable. It sounds synthetic/robotic and is blocked unless the user/agent explicitly opts in for a draft/test. Never use it as natural final narration; use human-recorded audio or an authorized connected natural-voice provider.
 - Text-only starter composition: `tools/project-generator/generate.mjs` (Node.js 22+). It creates HTML and copies project JSON; it does not generate media or render MP4.
 - Asset preflight: `tools/asset-preflight/check.mjs` checks manifest structure, local paths, and missing rights-metadata warnings; it cannot prove ownership or licensing.
 - Timeline validation: `tools/timeline-validator/validate.mjs` checks scene timing, frame alignment, asset IDs, and audio cue ranges; it does not render or prove synchronization.
@@ -85,7 +85,7 @@ Read only the modules needed for the current task:
 - Timeline and FPS: `modules/timeline-orchestration.md`
 - Motion and transitions: `modules/transitions-motion.md`
 - Asset provenance and rights: `modules/media-management.md`
-- Voice and TTS: `modules/voice-production.md`
+- Voice and TTS: `modules/voice-production.md`\n- Google Flow prompts, pt-BR natural narration direction, avatar/recipe continuity, reference-image discipline: `modules/google-flow-prompting.md`
 - Audio and cue synchronization: `modules/audio.md`, `modules/audio-synchronization.md`
 - Captions and accessibility: `modules/captions-accessibility.md`
 - Automation and project generation: `modules/automation.md`
