@@ -1,6 +1,6 @@
 # Procedural Scene Engine — first executable prototype
 
-This dependency-free Node.js tool creates a self-contained HTML/SVG composition from JSON. It generates original vector shapes, typography, simple diagrams and basic entrance animation without calling remote image or video generation services.
+This dependency-free Node.js tool creates a self-contained HTML/SVG composition from JSON. It generates original vector shapes, typography, simple diagrams and basic entrance animation without calling remote image/video generation services.
 
 ## Run
 
@@ -12,7 +12,13 @@ python3 tools/procedural-scene-engine/run_pipeline.py examples/procedural-scenes
 
 The pipeline optionally synthesizes narration locally, renders the video, probes the actual MP4 streams and writes a QA metadata report. `provider_calls: 0` means no remote media provider was called. It does not claim that automated metadata checks replace watching/listening to the final video.
 
+**Voice quality gate:** eSpeak NG has a synthetic/robotic timbre and is only a draft/test fallback. Narration in project JSON is blocked unless the narration object explicitly contains `"allow_robotic_espeak": true`. For final natural narration, supply a human-recorded voice track or use an authorized natural-voice provider connected to the host. Do not present eSpeak NG output as natural or final-quality.
 
+Direct draft synthesis is opt-in too:
+
+```bash
+python3 tools/procedural-scene-engine/tts.py "Olá, vamos começar!" --output ./output/voice.wav --voice pt-br --allow-robotic-espeak
+```
 
 ```bash
 node tools/procedural-scene-engine/generate.mjs examples/procedural-scenes/vertical-explainer.json ./output/vertical-explainer
@@ -26,7 +32,7 @@ To render the supported procedural shapes and text to MP4 using local FFmpeg:
 python3 tools/procedural-scene-engine/render.py examples/procedural-scenes/render-fixture.json --output ./output/procedural.mp4
 ```
 
-The MP4 renderer supports text, timed captions, rectangles, lines, circles, triangles, diamonds, stars and progress bars on generated color backgrounds. It also supports project-level crossfades (fade, dissolve, wipe, slide and circle variants), zoom/pan camera moves, staggered element reveals, and optional local audio files as project-level voiceover/music objects, with gain and start offset. For offline synthetic narration, the optional tts.py helper uses locally installed eSpeak NG (no network/API); for example: `python3 tools/procedural-scene-engine/tts.py "Olá, vamos começar!" --output ./output/voice.wav --voice pt-br`. The voice is synthetic and comparatively robotic, not a photorealistic AI voice. It requires FFmpeg with libx264 and drawtext support. No audio is synthesized; audio files must be supplied by the user.
+The MP4 renderer supports text, timed captions, rectangles, lines, circles, triangles, diamonds, stars and progress bars on generated color backgrounds. It also supports project-level crossfades (fade, dissolve, wipe, slide and circle variants), zoom/pan camera moves, staggered element reveals, and optional local audio files as project-level voiceover/music objects, with gain and start offset. It requires FFmpeg with libx264 and drawtext support. No audio is synthesized unless the separate optional TTS step is explicitly authorized; audio files can also be supplied by the user.
 
 ## Supported elements
 
@@ -40,4 +46,4 @@ The SVG/HTML generator supports text, rectangles, circles, lines, progress bars,
 
 ## Current limits
 
-This is an initial procedural graphics/composition prototype, not the complete engine. The MP4 renderer currently renders text, rectangles, lines and progress bars on color backgrounds, with selectable cross-scene transitions, local audio mixing, staggered element reveals, and simple zoom/pan camera moves. It does not yet render arbitrary SVG paths, rigged characters, synthesize speech, generate realistic footage, import external fonts, or provide a full keyframe/timeline editor. More elaborate camera paths remain preview-only. It produces silent MP4 files unless local voiceover or music files are supplied. Speech synthesis is a separate optional local eSpeak NG step. Automated FFmpeg/FFprobe smoke tests verify the supported MP4 path, but every production still needs visual review.
+This is an initial procedural graphics/composition prototype, not the complete engine. The MP4 renderer currently renders text, rectangles, lines and progress bars on color backgrounds, with selectable cross-scene transitions, local audio mixing, staggered element reveals, and simple zoom/pan camera moves. It does not yet render arbitrary SVG paths, rigged characters, synthesize natural speech, generate realistic footage, import external fonts, or provide a full keyframe/timeline editor. More elaborate camera paths remain preview-only. It produces silent MP4 files unless local voiceover or music files are supplied. eSpeak NG voice is robotic and explicitly draft-only. Automated FFmpeg/FFprobe smoke tests verify the supported MP4 path, but every production still needs visual and audio review.
