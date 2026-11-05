@@ -31,7 +31,11 @@ def run(project_path, output_path, ffmpeg="ffmpeg", ffprobe="ffprobe"):
             raise ValueError("narration must be an object with non-empty text.")
         voice_name = narration.get("voice", "pt-br")
         voice_path = inside(base, narration.get("output", "generated-narration.wav"))
-        if narration.get("engine", "espeak-ng") != "espeak-ng":\n            raise ValueError("Unsupported offline narration engine. Use a human recording or connected natural-voice provider; eSpeak NG is the only local draft engine.")\n        if narration.get("allow_robotic_espeak") is not True:\n            raise ValueError("eSpeak NG narration is robotic and blocked by default. For draft/test use only, set narration.allow_robotic_espeak=true; for final natural voice use human-recorded audio or an authorized natural-voice provider.")\n        command = [sys.executable, str(TTS), narration["text"], "--output", str(voice_path), "--voice", str(voice_name), "--allow-robotic-espeak"]
+        if narration.get("engine", "espeak-ng") != "espeak-ng":
+            raise ValueError("Unsupported offline narration engine. Use a human recording or connected natural-voice provider; eSpeak NG is the only local draft engine.")
+        if narration.get("allow_robotic_espeak") is not True:
+            raise ValueError("eSpeak NG narration is robotic and blocked by default. For draft/test use only, set narration.allow_robotic_espeak=true; for final natural voice use human-recorded audio or an authorized natural-voice provider.")
+        command = [sys.executable, str(TTS), narration["text"], "--output", str(voice_path), "--voice", str(voice_name), "--allow-robotic-espeak"]
         for key, flag in (("speed", "--speed"), ("pitch", "--pitch"), ("amplitude", "--amplitude")):
             if key in narration:
                 command += [flag, str(narration[key])]
@@ -86,7 +90,8 @@ def main():
         serialized = json.dumps(report, indent=2, ensure_ascii=False)
         if args.report:
             args.report.parent.mkdir(parents=True, exist_ok=True)
-            args.report.write_text(serialized + "\n", encoding="utf-8")
+            args.report.write_text(serialized + "
+", encoding="utf-8")
         print(serialized)
         return 0
     except Exception as exc:
