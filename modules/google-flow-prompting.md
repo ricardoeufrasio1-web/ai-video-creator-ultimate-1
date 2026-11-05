@@ -60,3 +60,21 @@ Before returning prompts:
 5. Verify reference-image plan follows the user's preference; recipe images must not pre-spoil prep state.
 6. Confirm every prompt contains pt-BR locale and the natural voice direction, plus explicit no-text constraints when applicable.
 7. Mark any capability gap honestly. Prompts cannot guarantee Flow will obey voice/continuity; final clips must be auditioned and visually reviewed. Regenerate or revise defective scenes rather than calling them complete.
+
+## 8. User-established recipe preset — Leve e Saboroso
+Use this preset when the user asks for a Leve e Saboroso recipe video; do not force it onto other projects.
+- Typical runtime is 30–40 seconds, sometimes a 25–30 second test. Split into Flow clips of at most 10 seconds; use 4–6 second shots for detailed cooking steps when pacing and sync require them.
+- Portuguese narration should start with an immediate hook/action, not a long greeting or slow introduction. The finished dish may be the opening visual hook for roughly 4–5 seconds only when the current script/storyboard asks for it; then transition to preparation, with the next clip explicitly continuing from that state.
+- The newest recipe reference rule is avatar image only as identity reference. Do not attach food/ingredient reference images unless the user explicitly changes this preference. Describe recipe objects and stages in prompt text.
+- Keep recipe and food as the visual priority; avatar may appear naturally in a home kitchen, in ordinary kitchen clothing. Avoid showing a phone in UGC footage unless requested. Keep face consistent and avoid plastic/airbrushed skin.
+- At the end, when the offer is this recipe collection, use the user-approved CTA concept: “Quer mais receitas assim? 200 receitas leves e saborosas. Link na bio.” Preserve the exact CTA supplied for a specific video. Do not reintroduce a price comparison/price line when the user has excluded it. Avoid absolute claims such as “não engorda” or “pode comer à vontade”; use grounded “leve”, “saboroso”, “mais equilibrado” or “sem exagero” positioning.
+- Final payoff: show the completed dish appetizingly; show the avatar tasting a piece only when the shot is requested and timing is physically plausible. Narration and action must align exactly (e.g., do not show a baked, plated food while the voice describes mixing ingredients).
+- For each 10-second prompt (or shorter clip), repeat continuity lock: same avatar face/hair/skin/wardrobe, kitchen/counter, lighting, utensils and ingredient progression. State what hands are doing during each narration phrase. Scene B begins from scene A's final arrangement; do not reset bowls or props.
+
+## 9. Voice and clip rejection examples
+Reject these outputs and revise prompt or regenerate:
+- Narration sounds like eSpeak or a monotone synthesized read; the voice uses PT-PT rather than PT-BR; the line is rushed or extra words were added.
+- Avatar's face, hairstyle, outfit or apparent age changes across scenes; face is waxy, hands malformed, or smile is exaggerated.
+- Food appears cooked before preparation, ingredient amounts/containers change, the camera reveals a different kitchen, or objects teleport between clips.
+- Scene narration describes a step not shown, the visual action starts late/ends early, the cut changes the physical state without transition, or the last scene does not resolve/pay off the opening.
+- Captions/text/logos appear when excluded.
