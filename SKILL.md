@@ -85,7 +85,8 @@ Read only the modules needed for the current task:
 - Timeline and FPS: `modules/timeline-orchestration.md`
 - Motion and transitions: `modules/transitions-motion.md`
 - Asset provenance and rights: `modules/media-management.md`
-- Voice and TTS: `modules/voice-production.md`\n- Google Flow prompts, pt-BR natural narration direction, avatar/recipe continuity, reference-image discipline: `modules/google-flow-prompting.md`
+- Voice and TTS: `modules/voice-production.md`
+- Google Flow prompts, pt-BR natural narration direction, avatar/recipe continuity, reference-image discipline: `modules/google-flow-prompting.md`
 - Audio and cue synchronization: `modules/audio.md`, `modules/audio-synchronization.md`
 - Captions and accessibility: `modules/captions-accessibility.md`
 - Automation and project generation: `modules/automation.md`
