@@ -31,7 +31,7 @@ def run(project_path, output_path, ffmpeg="ffmpeg", ffprobe="ffprobe"):
             raise ValueError("narration must be an object with non-empty text.")
         voice_name = narration.get("voice", "pt-br")
         voice_path = inside(base, narration.get("output", "generated-narration.wav"))
-        command = [sys.executable, str(TTS), narration["text"], "--output", str(voice_path), "--voice", str(voice_name)]
+        if narration.get("engine", "espeak-ng") != "espeak-ng":\n            raise ValueError("Unsupported offline narration engine. Use a human recording or connected natural-voice provider; eSpeak NG is the only local draft engine.")\n        if narration.get("allow_robotic_espeak") is not True:\n            raise ValueError("eSpeak NG narration is robotic and blocked by default. For draft/test use only, set narration.allow_robotic_espeak=true; for final natural voice use human-recorded audio or an authorized natural-voice provider.")\n        command = [sys.executable, str(TTS), narration["text"], "--output", str(voice_path), "--voice", str(voice_name), "--allow-robotic-espeak"]
         for key, flag in (("speed", "--speed"), ("pitch", "--pitch"), ("amplitude", "--amplitude")):
             if key in narration:
                 command += [flag, str(narration[key])]
