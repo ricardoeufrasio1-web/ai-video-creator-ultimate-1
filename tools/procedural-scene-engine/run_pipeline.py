@@ -90,8 +90,7 @@ def main():
         serialized = json.dumps(report, indent=2, ensure_ascii=False)
         if args.report:
             args.report.parent.mkdir(parents=True, exist_ok=True)
-            args.report.write_text(serialized + "
-", encoding="utf-8")
+            args.report.write_text(serialized + "\n", encoding="utf-8")
         print(serialized)
         return 0
     except Exception as exc:
